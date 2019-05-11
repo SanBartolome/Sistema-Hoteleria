@@ -32,7 +32,8 @@ namespace HotelBahia.DataAccess
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-GR17ES1\\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;");
+                //optionsBuilder.UseSqlServer("Server=DESKTOP-GR17ES1\\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-7TBM1CT8\\SQLEXPRESS2017;Database=HotelBahia;User=admin;Password=1234;");
             }
         }
 
