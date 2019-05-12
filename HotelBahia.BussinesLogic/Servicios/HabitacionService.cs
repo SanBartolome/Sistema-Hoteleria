@@ -14,7 +14,6 @@ namespace HotelBahia.BussinesLogic.Servicios
         public HabitacionService(HabitacionRepository habitacionRepository)
         {
             _habitacionRepository = habitacionRepository;
-            CheckOut(1);
         }
         
         public DtoB CheckOut(int nroHabitacion)
