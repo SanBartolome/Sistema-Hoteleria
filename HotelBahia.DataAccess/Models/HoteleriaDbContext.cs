@@ -1,17 +1,16 @@
 ﻿using System;
-using HotelBahia.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace HotelBahia.DataAccess
+namespace HotelBahia.DataAccess.Models
 {
-    public partial class HotelDbContext : DbContext
+    public partial class HoteleriaDbContext : DbContext
     {
-        public HotelDbContext()
+        public HoteleriaDbContext()
         {
         }
 
-        public HotelDbContext(DbContextOptions<HotelDbContext> options)
+        public HoteleriaDbContext(DbContextOptions<HoteleriaDbContext> options)
             : base(options)
         {
         }
@@ -32,7 +31,7 @@ namespace HotelBahia.DataAccess
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-GR17ES1\\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-GR17ES1\\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%");
             }
         }
 
@@ -80,30 +79,29 @@ namespace HotelBahia.DataAccess
 
             modelBuilder.Entity<Empleado>(entity =>
             {
+                entity.HasIndex(e => e.UsuarioNombre)
+                    .HasName("IX_Empleado")
+                    .IsUnique();
+
                 entity.Property(e => e.EmpleadoId).HasColumnName("EmpleadoID");
 
                 entity.Property(e => e.Apellidos)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Correo)
-                    .IsRequired()
                     .HasMaxLength(150)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Direccion)
-                    .IsRequired()
                     .HasMaxLength(120)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombres)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Sexo)
-                    .IsRequired()
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
@@ -111,9 +109,9 @@ namespace HotelBahia.DataAccess
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.UsuarioNombreNavigation)
-                    .WithMany(p => p.Empleado)
-                    .HasForeignKey(d => d.UsuarioNombre)
+                entity.HasOne(d => d.Usuario)
+                    .WithOne(p => p.Empleado)
+                    .HasForeignKey<Empleado>(d => d.UsuarioNombre)
                     .HasConstraintName("FK_Empleado_Usuario");
             });
 
