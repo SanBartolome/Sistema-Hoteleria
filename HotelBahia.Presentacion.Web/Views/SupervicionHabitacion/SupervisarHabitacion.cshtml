@@ -1,0 +1,46 @@
+﻿@model ReporteHabitacionModel
+@{
+  ViewData["Title"] = "Supervisar Habitacion";
+}
+<section class="content-header">
+  <h1>
+    Habitaci&oacute;n N° @Model.NumeroHab
+  </h1>
+  @*<ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Desocupar Habitaci&oacute;n</a></li>
+      <li class="active">Desocupar Habitcion</li>
+    </ol>*@
+</section>
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-3">Actividad ejemplo</div>
+    <div class="col-md-1">
+      <select class="form-control">
+        <option value="1">Bueno</option>
+        <option value="2">Regular</option>
+        <option value="3">Malo</option>
+      </select>
+    </div>
+    <div class="col-md-8"></div>
+  </div>
+  @{var indice = 0;}
+  @foreach (var a in Model.Actividades)
+  {<div class="row">
+      <div class="col-md-3">@a.Descripcion</div>
+      <div class="col-md-1">
+        <select name="Actividades[@indice].estado" class="form-control">
+          <option value="1">Bueno</option>
+          <option value="2">Regular</option>
+          <option value="3">Malo</option>
+        </select>
+      </div>
+      <div class="col-md-8"></div>
+      indice++;
+    </div>
+  }
+
+   <div class="row">
+     <div class="col-md-6"><button class="btn btn-info">Re-Limpieza</button></div>
+     <div class="col-md-6 text-left"><button  class="btn btn-success">Liberar Habitación</button></div>
+   </div>
+</div>
