@@ -1,4 +1,5 @@
-﻿using HotelBahia.DataAccess.Models;
+﻿using HotelBahia.BussinesLogic.Servicios;
+using HotelBahia.DataAccess.Models;
 using HotelBahia.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,11 +11,9 @@ namespace HotelBahia.DataAccess.Test
     {
         static void Main(string[] args)
         {
-            Repository<Rol> r = new Repository<Rol>(new HoteleriaContext());
-            var _context = new HoteleriaContext();
-            var blogs = _context.FromSql("SELECT * FROM dbo.Rol")
-    .ToList();
-            var a =  r.Find(x => x.RolId == 1);
+            HoteleriaContext context = new HoteleriaContext();
+            HabitacionRepository repo = new HabitacionRepository(context);
+            var a = repo.BuscarPorNro(11);
             Console.WriteLine("Hello World!");
         }
     }

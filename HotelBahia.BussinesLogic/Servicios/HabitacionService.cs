@@ -20,13 +20,28 @@ namespace HotelBahia.BussinesLogic.Servicios
         public DtoB CheckOut(int nroHabitacion)
         {
             DtoB rsp = new DtoB();
-            Habitacion h = _habitacionRepository.BuscarPorNro(nroHabitacion);
-            if(h != null)
+            Habitacion hab = _habitacionRepository.BuscarPorNro(nroHabitacion);
+            string estado;
+            if(hab != null)
             {
-               
+               estado = hab.EstadoHabitacion.EstadoNombre;
+               if(estado == "Ocupado")
+                {
+                    _habitacionRepository.EditarEstado(hab, "Desocupado");
+                }
+                else
+                {
+                    rsp.IsOk = false;
+                }
             }
-
-
+            else
+            {
+                rsp.IsOk = false;
+            }
+            if (rsp.IsOk)
+            {
+                //Aqui va el metodo de notificacion
+            }
             return rsp;
         }
     }
