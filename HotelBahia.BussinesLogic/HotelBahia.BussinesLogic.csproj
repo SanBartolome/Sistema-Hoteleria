@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\..\Program Files\dotnet\sdk\2.1.506\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
+    <Folder Include="Servicios\" />
   </ItemGroup>
 
 </Project>

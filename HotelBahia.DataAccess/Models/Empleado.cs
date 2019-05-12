@@ -14,12 +14,12 @@ namespace HotelBahia.DataAccess.Models
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Direccion { get; set; }
-        public int Telefono { get; set; }
+        public int? Telefono { get; set; }
         public string Correo { get; set; }
         public string Sexo { get; set; }
         public string UsuarioNombre { get; set; }
 
-        public Usuario UsuarioNombreNavigation { get; set; }
+        public Usuario Usuario { get; set; }
         public ICollection<AsignacionHabitacion> AsignacionHabitacion { get; set; }
     }
 }
