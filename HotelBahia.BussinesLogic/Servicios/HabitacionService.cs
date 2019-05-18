@@ -24,7 +24,7 @@ namespace HotelBahia.BussinesLogic.Servicios
                 { "Ocupado", new List<string>() { "Disponible" } },
                 { "Desocupado", new List<string>() { "Ocupado" } },
                 { "En Limpieza", new List<string>() { "Desocupado", "Limpieza Imcompleta" } },
-                { "Limpieza Realizada", new List<string>() { "En Limpieza" } },
+                { "Limpieza Realizada", new List<string>() { "Desocupado", "Limpieza Imcompleta" } },
                 { "Limpieza Incompleta", new List<string>() { "Limpieza Realizada" } },
                 { "Habilitado", new List<string>() { "Limpieza Realizada" } }
             };

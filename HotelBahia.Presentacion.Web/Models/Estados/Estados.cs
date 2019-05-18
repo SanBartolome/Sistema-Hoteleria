@@ -21,4 +21,11 @@ namespace HotelBahia.Presentacion.Web.Models.Estados
         Iniciada = 1,
         Terminada = 2,
     }
+
+    public enum ActividadEstado
+    {
+        Mal = 3,
+        Regular = 2,
+        Bien = 1,
+    }
 }

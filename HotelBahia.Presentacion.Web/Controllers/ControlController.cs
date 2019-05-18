@@ -81,7 +81,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             switch (model.EstadoLimpieza)
             {
                 case LimpiezaEstado.Asignada:
-                    @ViewData["AccionBoton"] = "Iniciar Limpieza";
+                    @ViewData["AccionBoton"] = "Terminar Limpieza";
                     break;
                 case LimpiezaEstado.Iniciada:
                     @ViewData["AccionBoton"] = "Terminar Limpieza";
@@ -100,22 +100,81 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [HttpPost]
         public IActionResult RealizarLimpieza()
         {
-            ////RealizarLimpiezaViewModel model = CargarRealizarLimpiezaModel(id, 3);
-            //switch (model.EstadoLimpieza)
-            //{
-            //    case LimpiezaEstado.Asignada:
-            //        @ViewData["AccionBoton"] = "Iniciar Limpieza";
-            //        break;
-            //    case LimpiezaEstado.Iniciada:
-            //        @ViewData["AccionBoton"] = "Terminar Limpieza";
-            //        break;
-            //    case LimpiezaEstado.Terminada:
-            //        @ViewData["AccionBoton"] = "Terminar Limpieza";
-            //        break;
-            //    default:
-            //        break;
-            //}
-            return View(  );
+            RealizarLimpiezaViewModel model = new RealizarLimpiezaViewModel();
+            model = JsonConvert.DeserializeObject<RealizarLimpiezaViewModel>(HttpContext.Session.GetString("RealizarLimpieza"));
+            switch (model.EstadoLimpieza)
+            {
+                case LimpiezaEstado.Asignada:
+                    @ViewData["AccionBoton"] = "Terminar Limpieza";
+                    break;
+                case LimpiezaEstado.Iniciada:
+                    @ViewData["AccionBoton"] = "Terminar Limpieza";
+                    break;
+                case LimpiezaEstado.Terminada:
+                    @ViewData["AccionBoton"] = "Terminar Limpieza";
+                    break;
+                default:
+                    break;
+            }
+            var dto = _habitacionService.CambiarEstado(model.NroHabitacion, "Limpieza Realizada");
+
+            if (dto.IsOk)
+            {
+                ViewData["Mensaje"] = "Correcto, La habitación paso a estado de Limpieza Realizada";
+            }
+            else
+            {
+                ViewData["Mensaje"] = "Error, La Habitacion solicitada NO puede cambiar a estado";
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Supervisar(int id)
+        {
+            int idEmpleado = HttpContext.Session.GetInt32("IdEmpleado") ?? 3;
+            HttpContext.Session.SetInt32("IdEmpleado", idEmpleado);
+            int idHabitacion;
+            SupervisarViewModel model = new SupervisarViewModel();
+            if (HttpContext.Session.GetInt32("IdHabitacion") != null
+               && HttpContext.Session.GetInt32("IdHabitacion") == id
+               && HttpContext.Session.GetString("Supervisar") != null)
+            {
+                idHabitacion = id;
+                model = JsonConvert.DeserializeObject<SupervisarViewModel>(HttpContext.Session.GetString("Supervisar"));
+            }
+            else
+            {
+                var hab = _habitacionService.ObtenerPorId(id);
+                model.Actividades = new List<ActividadSupervisar>();
+                model.EstadoHabitacion = (HabitacionEstado)hab.EstadoHabitacionId;
+                model.NroHabitacion = (int)hab.Numero;
+                model.IdHabitacion = hab.HabitacionId;
+                foreach (var item in _controlService.ObtenerActividadesDeHabPorEmpleado(model.IdHabitacion, idEmpleado))
+                {
+                    model.Actividades.Add(new ActividadSupervisar() { IdActividad = item.ActividadId, Descripcion = item.Descripcion, Estado = (ActividadEstado)item.Estado});
+                }
+            }
+            HttpContext.Session.SetString("Supervisar", JsonConvert.SerializeObject(model));
+            HttpContext.Session.SetInt32("Idhabitacion", model.IdHabitacion);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Habilitar()
+        {
+            SupervisarViewModel model = new SupervisarViewModel();
+            model = JsonConvert.DeserializeObject<SupervisarViewModel>(HttpContext.Session.GetString("Supervisar"));
+            var dto = _habitacionService.CambiarEstado(model.NroHabitacion, "Ocupado");
+            if (dto.IsOk)
+            {
+                ViewData["Mensaje"] = "Correcto, La habitación paso a estado de Limpieza Realizada";
+            }
+            else
+            {
+                ViewData["Mensaje"] = "Error, La Habitacion solicitada NO puede cambiar a estado";
+            }
+            return View(model);
         }
     }
 }
