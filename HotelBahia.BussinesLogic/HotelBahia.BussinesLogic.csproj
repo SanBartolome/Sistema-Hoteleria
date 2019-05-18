@@ -5,12 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HotelBahia.DataAccess\HotelBahia.DataAccess.csproj" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="Helpers\" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelBahia.DataAccess\HotelBahia.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

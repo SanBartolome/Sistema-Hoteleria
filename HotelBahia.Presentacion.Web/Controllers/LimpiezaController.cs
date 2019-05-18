@@ -12,5 +12,10 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult RealizarLimpieza()
+        {
+            return View();
+        }
     }
 }

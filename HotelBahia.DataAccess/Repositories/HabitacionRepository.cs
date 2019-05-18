@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -27,6 +28,17 @@ namespace HotelBahia.DataAccess.Repositories
             var estado =_context.EstadoHabitacion.Where(x => x.EstadoNombre == estadoNombre).FirstOrDefault();
             habitacion.EstadoHabitacion = estado;
             Edit(habitacion);
+        }
+
+        public IEnumerable<Actividad> ObtenerActividadesPorEmpleado(int idHabitacion,int idEmpleado)
+        {
+            SqlParameter[] parametros = new SqlParameter[]
+            {   new SqlParameter("@IdEmpleado", idEmpleado),
+                new SqlParameter("@IdHabitacion", idHabitacion)
+            };
+           var result = _context.Actividad
+                .FromSql("HabitacionObtenerActividadesPorEmpleadoSP @IdEmpleado, @IdHabitacion",  parametros);
+           return result.ToList();
         }
     }
 }

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HotelBahia.BussinesLogic.Dto.Habitacion
+namespace HotelBahia.BussinesLogic.Mappers
 {
-    public class HabitacionDto
+    public class ActividadMapper
     {
+
     }
 }

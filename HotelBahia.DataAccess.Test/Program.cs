@@ -13,7 +13,14 @@ namespace HotelBahia.DataAccess.Test
         {
             HoteleriaContext context = new HoteleriaContext();
             HabitacionRepository repo = new HabitacionRepository(context);
-            var a = repo.BuscarPorNro(11);
+            //var a = repo.BuscarPorNro(11);
+            ControlService serv = new ControlService(repo);
+
+            var a = serv.ObtenerActividadesDeHabPorEmpleado(1, 3);
+            var b = repo.ObtenerActividadesPorEmpleado(1, 3);
+
+
+
             Console.WriteLine("Hello World!");
         }
     }
