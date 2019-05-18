@@ -28,7 +28,7 @@ namespace HotelBahia.Presentacion.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Server=.\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;Trusted_Connection=True;";
+            var connection = @"Server=serversqlas.database.windows.net;Database=Holeria;User=userfisi;Password=%abcd1234%;Trusted_Connection=False;";
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
@@ -52,8 +52,8 @@ namespace HotelBahia.Presentacion.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            
-            
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

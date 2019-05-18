@@ -16,12 +16,12 @@ namespace HotelBahia.BussinesLogic.Servicios
         {
             _habitacionRepository = habitacionRepository;
         }
-        
+
         public DtoB CambiarEstado(int nroHabitacion, string nuevoEstado)
         {
             Dictionary<string, List<string>> restricciones = new Dictionary<string, List<string>>
             {
-                { "Ocupado", new List<string>() { "Disponible" } },
+                { "Ocupado", new List<string>() { "Limpieza Realizada" } },
                 { "Desocupado", new List<string>() { "Ocupado" } },
                 { "En Limpieza", new List<string>() { "Desocupado", "Limpieza Imcompleta" } },
                 { "Limpieza Realizada", new List<string>() { "Desocupado", "Limpieza Imcompleta" } },
@@ -35,7 +35,7 @@ namespace HotelBahia.BussinesLogic.Servicios
             if (hab != null)
             {
                 estado = hab.EstadoHabitacion.EstadoNombre;
-                
+
                 foreach (var item in restricciones)
                 {
                     if (nuevoEstado == item.Key && item.Value.Contains(estado))

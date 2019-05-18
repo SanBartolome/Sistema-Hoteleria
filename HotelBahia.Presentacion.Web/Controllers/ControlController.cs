@@ -54,13 +54,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [HttpGet]
         public IActionResult RealizarLimpieza(int id)
         {
-            int idEmpleado = HttpContext.Session.GetInt32("IdEmpleado") ?? 3;
+            int idEmpleado = HttpContext.Session.GetInt32("IdEmpleado") ?? 1;
             HttpContext.Session.SetInt32("IdEmpleado", idEmpleado);
             int idHabitacion;
             RealizarLimpiezaViewModel model = new RealizarLimpiezaViewModel();
-            if (HttpContext.Session.GetInt32("IdHabitacion") != null 
+            if (HttpContext.Session.GetInt32("IdHabitacion") != null
                && HttpContext.Session.GetInt32("IdHabitacion") == id
-               && HttpContext.Session.GetString("RealizarLimpieza") != null) 
+               && HttpContext.Session.GetString("RealizarLimpieza") != null)
             {
                 idHabitacion = id;
                 model = JsonConvert.DeserializeObject<RealizarLimpiezaViewModel>(HttpContext.Session.GetString("RealizarLimpieza"));
@@ -132,7 +132,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [HttpGet]
         public IActionResult Supervisar(int id)
         {
-            int idEmpleado = HttpContext.Session.GetInt32("IdEmpleado") ?? 3;
+            int idEmpleado = HttpContext.Session.GetInt32("IdEmpleado") ?? 1;
             HttpContext.Session.SetInt32("IdEmpleado", idEmpleado);
             int idHabitacion;
             SupervisarViewModel model = new SupervisarViewModel();
@@ -165,16 +165,10 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             SupervisarViewModel model = new SupervisarViewModel();
             model = JsonConvert.DeserializeObject<SupervisarViewModel>(HttpContext.Session.GetString("Supervisar"));
-            var dto = _habitacionService.CambiarEstado(model.NroHabitacion, "Ocupado");
-            if (dto.IsOk)
-            {
-                ViewData["Mensaje"] = "Correcto, La habitación paso a estado de Limpieza Realizada";
-            }
-            else
-            {
-                ViewData["Mensaje"] = "Error, La Habitacion solicitada NO puede cambiar a estado";
-            }
-            return View(model);
+            _habitacionService.CambiarEstado(model.IdHabitacion, "Ocupado");
+
+
+            return RedirectToAction("CheckOut");
         }
     }
 }
