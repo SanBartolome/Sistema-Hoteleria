@@ -1,0 +1,39 @@
+﻿@model RealizarLimpiezaViewModel
+
+@{
+    ViewData["Title"] = "RealizarLimpieza";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card bg-white">
+                <div class="card-body">
+                    <form asp-controller="Control" asp-action="RealizarLimpieza" method="post">
+
+
+                        <h2>RealizarLimpieza</h2>
+                        <br />
+                        <div>
+                            Nro Habitacion: @Model.NroHabitacion
+                        </div>
+                        <div>Actividades a Realizar</div>
+                        <ul>
+                            @foreach (var item in Model.Actividades)
+                            {
+                                <li>
+                                    @item.Descripcion
+                                </li>
+                            }
+                        </ul>
+                        <br />
+                        <div>@ViewData["Mensaje"]</div>
+                        <button class="btn btn-primary" type="submit">@ViewData["AccionBoton"]</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

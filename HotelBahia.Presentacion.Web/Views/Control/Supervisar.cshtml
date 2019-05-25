@@ -1,0 +1,40 @@
+﻿@model SupervisarViewModel
+@using HotelBahia.Presentacion.Web.Models.Estados;
+@{
+    ViewData["Title"] = "Supervisar";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card bg-white">
+                <div class="card-body">
+                    <form  method="post">
+
+
+                        <h2>Supervisar </h2>
+                        <br />
+                        <div>
+                            Nro Habitacion: @Model.NroHabitacion
+                        </div>
+                        <div>Actividades a Supervisar</div>
+                        <ul>
+                            @foreach (var item in Model.Actividades)
+                            {
+                            <li>
+                                @item.Descripcion
+                                <select asp-for="@item.Estado" name="@item.IdActividad"
+                                        asp-items="Html.GetEnumSelectList<ActividadEstado>()"></select>
+                            </li>
+                            }
+                        </ul>
+                        <br />
+                        <div>@ViewData["Mensaje"]</div>
+                        <button asp-controller="Control" asp-action="Habilitar" class="btn btn-primary" type="submit">Habilitar Habitaciòn</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
