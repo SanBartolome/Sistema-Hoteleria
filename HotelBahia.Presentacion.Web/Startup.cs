@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HotelBahia.BussinesLogic.Servicios;
 using HotelBahia.DataAccess.Models;
 using HotelBahia.DataAccess.Repositories;
@@ -28,9 +29,9 @@ namespace HotelBahia.Presentacion.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Server=serversqlas.database.windows.net;Database=Holeria;User=userfisi;Password=%abcd1234%;Trusted_Connection=False;";
+            //var connection = @"Server=serversqlas.database.windows.net;Database=Holeria;User=userfisi;Password=%abcd1234%;Trusted_Connection=False;";
+            var connection = @"Server=DESKTOP-GR17ES1\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;Trusted_Connection=True;";
             services.AddDistributedMemoryCache();
-
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.

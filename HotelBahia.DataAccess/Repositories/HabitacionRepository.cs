@@ -19,8 +19,7 @@ namespace HotelBahia.DataAccess.Repositories
         {
             return _context.Habitacion
                 .Include(x => x.EstadoHabitacion)
-                .Where(x => x.Numero == numero)
-                .FirstOrDefault();
+                .SingleOrDefault(x => x.Numero == numero);
         }
 
         public void EditarEstado(Habitacion habitacion, string estadoNombre)
@@ -28,6 +27,36 @@ namespace HotelBahia.DataAccess.Repositories
             var estado =_context.EstadoHabitacion.Where(x => x.EstadoNombre == estadoNombre).FirstOrDefault();
             habitacion.EstadoHabitacion = estado;
             Edit(habitacion);
+        }
+
+        public IEnumerable<Actividad> ObtenerActividades(int idHabitacion)
+        {
+            var hab = _context.Habitacion
+                    .Single(x => x.HabitacionId == idHabitacion);
+
+            return _context.Entry(hab)
+             .Collection(x => x.HabitacionActividad)
+             .Query()
+             .Select(x => x.Actividad);
+        }
+        public IEnumerable<Actividad> ObtenerActividades(int idHabitacion, int tipoActividadId)
+        {
+            var hab = _context.Habitacion
+                    .Single(x => x.HabitacionId == idHabitacion);
+
+            return _context.Entry(hab)
+             .Collection(x => x.HabitacionActividad)
+             .Query()
+             .Where(x => x.Actividad.TipoActividadId == tipoActividadId)
+             .Select(x => x.Actividad);
+        }
+
+        public Habitacion ObtenerConActividades(int idHabitacion, int tipoActividadId)
+        {
+            return _context.Habitacion
+                    .Include(x => x.HabitacionActividad)
+                    .ThenInclude(x => x.Actividad)
+                    .Single(x => x.HabitacionId == idHabitacion);
         }
 
         public IEnumerable<Actividad> ObtenerActividadesPorEmpleado(int idHabitacion,int idEmpleado)
