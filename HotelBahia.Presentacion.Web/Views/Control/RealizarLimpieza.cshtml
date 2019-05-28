@@ -16,16 +16,10 @@
                         <h2>RealizarLimpieza</h2>
                         <br />
                         <div>
-                            Nro Habitacion: @Model.NroHabitacion
+                            Nro Habitacion: 
                         </div>
                         <div>Actividades a Realizar</div>
                         <ul>
-                            @foreach (var item in Model.Actividades)
-                            {
-                                <li>
-                                    @item.Descripcion
-                                </li>
-                            }
                         </ul>
                         <br />
                         <div>@ViewData["Mensaje"]</div>

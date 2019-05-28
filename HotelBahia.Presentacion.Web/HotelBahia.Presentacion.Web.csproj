@@ -1982,6 +1982,7 @@
 
   <ItemGroup>
     <PackageReference Include="AdminLTE.Template" Version="0.0.2.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
     <PackageReference Include="bootstrap" Version="4.3.1" />
     <PackageReference Include="jQuery" Version="3.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />

@@ -1,7 +1,6 @@
 ﻿@using HotelBahia.Presentacion.Web.Helpers
-@model RealizarLimpiezaViewModel;
 @{
-    ViewData["Title"] = "Realizar Limpieza";
+    ViewData["Title"] = "Check Out";
     var msj = @ViewData["Mensaje"] as Message;
 }
 
@@ -10,21 +9,12 @@
         <div class="box box-primary">
             <form asp-controller="CheckOut" asp-action="CheckOut" method="post">
                 <div class="box-header with-border">
-                    <h2 class="box-title">Habitacion: <span></span></h2>
+                    <h3 class="box-title">Check Out Habitación</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-group">
-                        <h4>Actividades a Realizar:</h4>
-                    </div>
-                    <div>
-                        <ul class="list-group list-group-unbordered">
-                            @foreach (var item in Model.habitacion.HabitacionActividad)
-                            {
-                                <li class="list-group-item">
-                                    @item.Actividad.Descripcion
-                                </li>
-                            }
-                        </ul>
+                        <label>Numero de Habitación</label>
+                        <input id="nroHabitacion" name="nroHabitacion" type="text" class="form-control" />
                     </div>
                     <div>
                         @if (msj != null)
@@ -36,10 +26,9 @@
                     </div>
                 </div>
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Limpieza Realizada</button>
+                    <button type="submit" class="btn btn-primary">Check Out</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
