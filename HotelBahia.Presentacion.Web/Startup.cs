@@ -42,7 +42,9 @@ namespace HotelBahia.Presentacion.Web
             });
 
             services.AddScoped<HabitacionRepository>();
+            services.AddScoped<AsignacionesRepository>();
             services.AddScoped<HabitacionService>();
+            services.AddScoped<AsignacionesService>();
             services.AddScoped<ControlService>();
             services.AddDbContext<HoteleriaContext>
                 (options => options.UseSqlServer(connection));

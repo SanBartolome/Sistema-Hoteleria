@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HotelBahia.Presentacion.Web.Estados;
 using HotelBahia.Presentacion.Web.Models;
 using HotelBahia.Presentacion.Web.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +18,11 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         public IActionResult DesocuparHabitacion(int idHabitacion) {
-            MantenimientoHabitacionViewModel vm = new MantenimientoHabitacionViewModel();
-            HabitacionesModel habitacion = new HabitacionesModel();
-            habitacion.idHabitacion = idHabitacion;
-            habitacion.IdEstado = EstadoHabitacion.idOcupado;
-            vm.DesocuparHabitacion(habitacion);
+            //MantenimientoHabitacionViewModel vm = new MantenimientoHabitacionViewModel();
+            //HabitacionesModel habitacion = new HabitacionesModel();
+            //habitacion.idHabitacion = idHabitacion;
+            //habitacion.IdEstado = EstadoHabitacion.idOcupado;
+            //vm.DesocuparHabitacion(habitacion);
             return View();
         }
     }

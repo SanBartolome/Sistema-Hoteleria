@@ -33,7 +33,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             else
             {
                 msj.Tipo = MessageType.danger;
-                msj.Contenido = string.Format("La Habitacion {0} no se puede realizar CheckOut", nroHabitacion);
+                msj.Contenido = string.Format("La Habitacion {0} no puede realizar CheckOut", nroHabitacion);
             }
             ViewData["Mensaje"] = msj;
             return View("Index");

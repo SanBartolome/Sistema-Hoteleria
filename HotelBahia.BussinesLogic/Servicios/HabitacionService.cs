@@ -6,16 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
+using HotelBahia.BussinesLogic.Servicios.AppServices;
 
 namespace HotelBahia.BussinesLogic.Servicios
 {
     public class HabitacionService
     {
         private HabitacionRepository _habitacionRepository;
+        private AsignacionesRepository _asignacionesRepository;
 
-        public HabitacionService(HabitacionRepository habitacionRepository)
+        public HabitacionService(HabitacionRepository habitacionRepository, AsignacionesRepository asignacionesRepository)
         {
             _habitacionRepository = habitacionRepository;
+            _asignacionesRepository = asignacionesRepository;
         }
 
         public bool CheckOut(Habitacion habitacion)
@@ -26,6 +29,8 @@ namespace HotelBahia.BussinesLogic.Servicios
                 habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
                 _habitacionRepository.Edit(habitacion);
                 _habitacionRepository.UnitOfWork.SaveChanges();
+                var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+                new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Limpieza);
             }
             catch (Exception)
             {

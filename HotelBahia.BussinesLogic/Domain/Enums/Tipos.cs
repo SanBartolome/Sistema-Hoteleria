@@ -10,4 +10,10 @@ namespace HotelBahia.BussinesLogic.Domain.Enums
         Mantenimieto = 2,
         Supervision = 3
     }
+    public enum RolEnum
+    {
+        Administrador = 1,
+        Supervisor = 2,
+        AgenteDeLimpieza = 3,
+    }
 }
