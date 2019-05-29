@@ -28,8 +28,8 @@ namespace HotelBahia.BussinesLogic.Servicios
                 if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Ocupado) return false;
                 habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
                 _habitacionRepository.Edit(habitacion);
-                _habitacionRepository.UnitOfWork.SaveChanges();
                 var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+                _habitacionRepository.UnitOfWork.SaveChanges();
                 new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Limpieza);
             }
             catch (Exception)
@@ -50,7 +50,6 @@ namespace HotelBahia.BussinesLogic.Servicios
                 return null;
             }
         }
-
         public Habitacion ObtenerConActividades(int idHabitacion, ActividadTipo tipo)
         {
             try
@@ -62,9 +61,6 @@ namespace HotelBahia.BussinesLogic.Servicios
                 return null;
             }
         }
-
-        
-
         public Habitacion Obtener(int id)
         {
             try
@@ -76,7 +72,6 @@ namespace HotelBahia.BussinesLogic.Servicios
                 return null;
             }
         }
-
         public Habitacion BuscarPorNro(int nroHabitacion)
         {
             try
@@ -87,6 +82,28 @@ namespace HotelBahia.BussinesLogic.Servicios
             {
                 return null;
             }
+        }
+
+        public bool RealizarLimpieza(int idHabitacion)
+        {
+            return RealizarLimpieza(Obtener(idHabitacion));
+        }
+        public bool RealizarLimpieza(Habitacion habitacion)
+        {
+            try
+            {
+                if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Desocupado && habitacion.EstadoHabitacionId != (int)HabitacionEstado.LimpiezaIncompleta) return false;
+                habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaRealizada;
+                _habitacionRepository.Edit(habitacion);
+                var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.Supervisor);
+                _habitacionRepository.UnitOfWork.SaveChanges();
+                new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Supervision);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         public List<Habitacion> Filtrar(Expression<Func<Habitacion, bool>> predicate)

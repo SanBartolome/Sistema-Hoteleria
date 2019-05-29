@@ -2,15 +2,16 @@
 @model RealizarLimpiezaViewModel;
 @{
     ViewData["Title"] = "Realizar Limpieza";
-    var msj = @ViewData["Mensaje"] as Message;
+    var msj = ViewData["Mensaje"] as Message;
 }
 
 <div class="row">
     <div class="col-md-4">
         <div class="box box-primary">
-            <form asp-controller="CheckOut" asp-action="CheckOut" method="post">
+            <form asp-controller="Limpieza" asp-action="RealizarLimpiezaPost" method="post">
+                <input type="hidden" asp-for="Habitacion.HabitacionId" name="idHabitacion" />
                 <div class="box-header with-border">
-                    <h2 class="box-title">Habitacion: <span></span></h2>
+                    <h2 class="box-title">Habitacion: @Model.Habitacion.Numero<span></span></h2>
                 </div>
                 <div class="box-body">
                     <div class="form-group">
@@ -18,7 +19,7 @@
                     </div>
                     <div>
                         <ul class="list-group list-group-unbordered">
-                            @foreach (var item in Model.habitacion.HabitacionActividad)
+                            @foreach (var item in Model.Habitacion.HabitacionActividad)
                             {
                                 <li class="list-group-item">
                                     @item.Actividad.Descripcion
