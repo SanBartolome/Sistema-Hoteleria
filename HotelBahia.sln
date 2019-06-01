@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBahia.Presentacion.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBahia.BussinesLogic", "HotelBahia.BussinesLogic\HotelBahia.BussinesLogic.csproj", "{34C33FCE-02C4-42F1-9413-8A8799A7AE2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelBahia.DataAccess.Test", "HotelBahia.DataAccess.Test\HotelBahia.DataAccess.Test.csproj", "{FBB94D69-2BAE-4337-A1C7-ACF35545A511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBahia.DataAccess.Test", "HotelBahia.DataAccess.Test\HotelBahia.DataAccess.Test.csproj", "{FBB94D69-2BAE-4337-A1C7-ACF35545A511}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

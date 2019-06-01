@@ -1,0 +1,44 @@
+﻿.box-habitacions-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap:wrap;
+    margin: -15px;
+
+    > div {
+        flex: 0 0 200px;
+        padding: 15px;
+    }
+
+    .box-habitacion {
+        display: flex;
+        flex-wrap:wrap;
+        align-content:stretch;
+        height:100%;
+        .inner {
+            background: #ffffff;
+            color: #494e52;
+            flex: 0 0 100%;
+        }
+
+        .small-box-footer {
+            line-height: 37px;
+            flex: 0 0 100%;
+            align-self:flex-end;
+        }
+    }
+}
+
+
+@each $color, $value in $theme-colors {
+    @include bg-variant(".bg-#{$color}", $value);
+}
+
+@if $enable-gradients {
+    @each $color, $value in $theme-colors {
+        @include bg-gradient-variant(".bg-gradient-#{$color}", $value);
+    }
+}
+
+@each $color, $value in $colors {
+    @include text-emphasis-variant(".text-#{$color}", $value);
+}

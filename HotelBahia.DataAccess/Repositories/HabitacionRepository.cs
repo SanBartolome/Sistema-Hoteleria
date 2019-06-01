@@ -1,4 +1,6 @@
-﻿using HotelBahia.DataAccess.Models;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
+using HotelBahia.BussinesLogic.Domain;
+using HotelBahia.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,13 +10,20 @@ using System.Text;
 
 namespace HotelBahia.DataAccess.Repositories
 {
-    public class HabitacionRepository : Repository<Habitacion> 
+    public class HabitacionRepository : Repository<Habitacion>, IHabitacionRepository
     {
-        public HabitacionRepository(HoteleriaContext context) : base (context)
+        public HabitacionRepository(HoteleriaContext context) : base(context)
         {
-            
+
         }
-        
+
+        public IEnumerable<Habitacion> GetAllComplete()
+        {
+            return _context.Habitacion
+               .Include(x => x.EstadoHabitacion)
+               .Include(x => x.TipoHabitacion);
+        } 
+
         public Habitacion BuscarPorNro(int numero)
         {
             return _context.Habitacion
@@ -24,7 +33,7 @@ namespace HotelBahia.DataAccess.Repositories
 
         public void EditarEstado(Habitacion habitacion, string estadoNombre)
         {
-            var estado =_context.EstadoHabitacion.Where(x => x.EstadoNombre == estadoNombre).FirstOrDefault();
+            var estado = _context.EstadoHabitacion.Where(x => x.EstadoNombre == estadoNombre).FirstOrDefault();
             habitacion.EstadoHabitacion = estado;
             Edit(habitacion);
         }
@@ -59,15 +68,15 @@ namespace HotelBahia.DataAccess.Repositories
                     .Single(x => x.HabitacionId == idHabitacion);
         }
 
-        public IEnumerable<Actividad> ObtenerActividadesPorEmpleado(int idHabitacion,int idEmpleado)
+        public IEnumerable<Actividad> ObtenerActividadesPorEmpleado(int idHabitacion, int idEmpleado)
         {
             SqlParameter[] parametros = new SqlParameter[]
             {   new SqlParameter("@IdEmpleado", idEmpleado),
                 new SqlParameter("@IdHabitacion", idHabitacion)
             };
-           var result = _context.Actividad
-                .FromSql("HabitacionObtenerActividadesPorEmpleadoSP @IdEmpleado, @IdHabitacion",  parametros);
-           return result.ToList();
+            var result = _context.Actividad
+                 .FromSql("HabitacionObtenerActividadesPorEmpleadoSP @IdEmpleado, @IdHabitacion", parametros);
+            return result.ToList();
         }
     }
 }

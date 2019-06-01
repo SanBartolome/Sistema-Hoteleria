@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace HotelBahia.BussinesLogic.Domain.Enums
         Ocupado = 2,
         Desocupado = 3,
         EnLimpieza = 4,
+        [Display(Name="Limpieza Realizada")]
         LimpiezaRealizada = 5,
         LimpiezaIncompleta = 6,
     }

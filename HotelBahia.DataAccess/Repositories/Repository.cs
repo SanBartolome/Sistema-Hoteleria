@@ -1,4 +1,5 @@
-﻿using HotelBahia.DataAccess.Models;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
+using HotelBahia.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,11 @@ using System.Text;
 
 namespace HotelBahia.DataAccess.Repositories
 {
-    public class Repository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly HoteleriaContext _context;
-        public virtual  DbSet<T> _dbSet { get; set;}
+
+        private readonly DbSet<T> _dbSet;
 
         public DbContext UnitOfWork { get => _context; }
 
@@ -47,7 +49,7 @@ namespace HotelBahia.DataAccess.Repositories
             return _dbSet.AsEnumerable();
         }
 
-        public void Save()
+        public void SaveChanges()
         {
             _context.SaveChanges();
         }

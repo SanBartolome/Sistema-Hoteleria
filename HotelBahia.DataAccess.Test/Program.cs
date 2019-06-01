@@ -1,5 +1,5 @@
 ﻿using HotelBahia.BussinesLogic.Servicios;
-using HotelBahia.DataAccess.Models;
+using HotelBahia.DataAccess.Context;
 using HotelBahia.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;

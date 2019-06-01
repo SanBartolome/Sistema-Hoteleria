@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "Limpieza de Habitaciones";
+}
+
+    <div id="appLimpieza" class="container-fluid">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                Habitaciones Asignadas
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div v-for="hab in habitacionesAsignadas" class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                        <div class="small-box bg-purple" >
+                            <div class="inner">
+                                <h3>{{hab.numero}}</h3>
+                                <p>{{hab.estado}}</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-broom"></i>
+                            </div>
+                            <a href="#" class="small-box-footer">Atender<i class="ml-2 fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+@section Scripts{ 
+    <script>
+        var limpiezaViewModel = new Vue({
+            el: "#appLimpieza",
+            data: {
+                habitacionesAsignadas: [] 
+            },
+            created: function () {
+                this.getHabitacionesAsignadas();
+            },
+            methods: {
+                getHabitacionesAsignadas: function () {
+                    this.$http.get('/api/Asignaciones/HabitacionesAsignadas', { params: { idEmpleado: 3 } })
+                        .then(function (response) {
+                            this.habitacionesAsignadas = response.body
+                        });
+                }
+            }
+        });
+    </script>
+}

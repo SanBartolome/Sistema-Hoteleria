@@ -1,7 +1,5 @@
 ﻿using HotelBahia.BussinesLogic.Domain.Enums;
-using HotelBahia.DataAccess.Models;
-using HotelBahia.DataAccess.Repositories;
-using Microsoft.AspNetCore.Http;
+using HotelBahia.BussinesLogic.Domain;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
