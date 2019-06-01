@@ -4,31 +4,85 @@
     var msj = @ViewData["Mensaje"] as Message;
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="box box-primary">
-            <form asp-controller="CheckOut" asp-action="CheckOut" method="post">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Check Out Habitación</h3>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <label>Numero de Habitación</label>
-                        <input id="nroHabitacion" name="nroHabitacion" type="text" class="form-control" />
+@*<div class="row">
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <form asp-controller="CheckOut" asp-action="CheckOut" method="post">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Check Out Habitación</h3>
                     </div>
-                    <div>
-                        @if (msj != null)
-                        {
-                            <div class="callout callout-@msj.Tipo.ToString()">
-                                <p>@msj.Contenido</p>
-                            </div>
-                        }
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label>Numero de Habitación</label>
+                            <input id="nroHabitacion" name="nroHabitacion" type="text" class="form-control" />
+                        </div>
+                        <div>
+                            @if (msj != null)
+                            {
+                                <div class="callout callout-@msj.Tipo.ToString()">
+                                    <p>@msj.Contenido</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Check Out</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>*@
+
+
+<div id="checkOutModule" class="container-fluid">
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            Lista de Habitaciones
+        </div>
+        <div class="card-body">
+            <div class="box-habitacions-wrapper">
+                <div v-for="hab in listHabitaciones">
+                    <div class="small-box box-habitacion" >
+                        <div class="inner">
+                            <h3>{{hab.numero}}</h3>
+                            <p class="text-info" v-bind:class="'text-' + colorState[hab.estadoHabitacionId]">{{hab.estadoHabitacion.estadoNombre}}</p>
+                        </div>
+                        <a href="#" class="small-box-footer " v-if="hab.estadoHabitacionId == 2" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]">Check Out<i class="ml-2 fa fa-arrow-circle-right"></i></a>
+                        <div v-else class="small-box-footer" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]"></div>
                     </div>
                 </div>
-                <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Check Out</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
+
 </div>
+
+@section Scripts{
+    <script>
+        var checkOutModule = new Vue({
+            el: "#checkOutModule",
+            data: {
+                listHabitaciones: [],
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow"
+                }
+            },
+            created: function () {
+                this.getListHabitaciones();
+            },
+            methods: {
+                getListHabitaciones: function () {
+                    this.$http.get('/api/Habitacion/')
+                        .then(function (response) {
+                            this.listHabitaciones = response.body
+                        });
+                }
+            }
+        });
+    </script>
+}

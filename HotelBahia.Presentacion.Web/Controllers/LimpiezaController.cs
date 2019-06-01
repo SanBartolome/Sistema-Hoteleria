@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Servicios;
-using HotelBahia.DataAccess.Models;
 using HotelBahia.Presentacion.Web.Helpers;
 using HotelBahia.Presentacion.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -59,5 +58,12 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return RedirectToAction("RealizarLimpieza", new { idHabitacion = idHabitacion });
             //return View("RealizarLimpieza", model);
         }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+
     }
 }

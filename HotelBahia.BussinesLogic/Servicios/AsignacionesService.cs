@@ -1,15 +1,16 @@
-﻿using HotelBahia.DataAccess.Models;
-using HotelBahia.DataAccess.Repositories;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
+using HotelBahia.BussinesLogic.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace HotelBahia.BussinesLogic.Servicios
 {
     public class AsignacionesService
     {
-        private AsignacionesRepository _asignacionesRepository;
-        public AsignacionesService(AsignacionesRepository asignacionesRepository)
+        private IAsignacionesRepository _asignacionesRepository;
+        public AsignacionesService(IAsignacionesRepository asignacionesRepository)
         {
             _asignacionesRepository = asignacionesRepository;
         }
@@ -26,6 +27,21 @@ namespace HotelBahia.BussinesLogic.Servicios
                 return null;
             }
             
+        }
+
+        public List<Habitacion> HabitacionesAsignadas(int idEmpleado)
+        {
+            try
+            {
+                return _asignacionesRepository
+                    .HabitacionesAsignadas(idEmpleado)
+                    .Select(x => x.Habitacion)
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

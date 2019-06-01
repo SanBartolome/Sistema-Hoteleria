@@ -1,4 +1,4 @@
-﻿using HotelBahia.DataAccess.Models;
+﻿using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.Presentacion.Web.Models.Estados;
 using System;
 using System.Collections.Generic;

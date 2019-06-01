@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using HotelBahia.DataAccess.Models;
-using HotelBahia.DataAccess.Repositories;
+using HotelBahia.BussinesLogic.Contracts.Repositories;
+using HotelBahia.BussinesLogic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,9 +9,9 @@ namespace HotelBahia.BussinesLogic.Servicios
 {
     public class ControlService
     {
-        private readonly HabitacionRepository _habitacionRepository;
+        private readonly IHabitacionRepository _habitacionRepository;
 
-        public ControlService(HabitacionRepository habitacionRepository)
+        public ControlService(IHabitacionRepository habitacionRepository)
         {
             _habitacionRepository = habitacionRepository;
         }

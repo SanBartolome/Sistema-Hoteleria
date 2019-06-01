@@ -1,21 +1,21 @@
 ﻿using HotelBahia.BussinesLogic.Domain.Enums;
-using HotelBahia.DataAccess.Repositories;
-using HotelBahia.DataAccess.Models;
+using HotelBahia.BussinesLogic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using HotelBahia.BussinesLogic.Servicios.AppServices;
+using HotelBahia.BussinesLogic.Contracts.Repositories;
 
 namespace HotelBahia.BussinesLogic.Servicios
 {
     public class HabitacionService
     {
-        private HabitacionRepository _habitacionRepository;
-        private AsignacionesRepository _asignacionesRepository;
+        private IHabitacionRepository _habitacionRepository;
+        private IAsignacionesRepository _asignacionesRepository;
 
-        public HabitacionService(HabitacionRepository habitacionRepository, AsignacionesRepository asignacionesRepository)
+        public HabitacionService(IHabitacionRepository habitacionRepository, IAsignacionesRepository asignacionesRepository)
         {
             _habitacionRepository = habitacionRepository;
             _asignacionesRepository = asignacionesRepository;
@@ -29,7 +29,7 @@ namespace HotelBahia.BussinesLogic.Servicios
                 habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
                 _habitacionRepository.Edit(habitacion);
                 var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
-                _habitacionRepository.UnitOfWork.SaveChanges();
+                _habitacionRepository.SaveChanges();
                 new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Limpieza);
             }
             catch (Exception)
@@ -96,7 +96,7 @@ namespace HotelBahia.BussinesLogic.Servicios
                 habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaRealizada;
                 _habitacionRepository.Edit(habitacion);
                 var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.Supervisor);
-                _habitacionRepository.UnitOfWork.SaveChanges();
+                _habitacionRepository.SaveChanges();
                 new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Supervision);
             }
             catch (Exception)
