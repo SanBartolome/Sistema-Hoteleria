@@ -1,19 +1,18 @@
 ﻿@using HotelBahia.Presentacion.Web.Helpers
+
 @model RealizarLimpiezaViewModel;
 @{
     ViewData["Title"] = "Realizar Limpieza";
     var msj = ViewData["Mensaje"] as Message;
 }
-
-<div class="row">
-    <div class="col-md-4">
-        <div class="box box-primary">
-            <form asp-controller="Limpieza" asp-action="RealizarLimpiezaPost" method="post">
-                <input type="hidden" asp-for="Habitacion.HabitacionId" name="idHabitacion" />
-                <div class="box-header with-border">
+<div class="container-fluid">
+    <div id="appLimpieza" class="row">
+        <div class="col-md-4">
+            <div class="card card-outline" v-bind:class="'card-' + colorState[estadoHabitacionId]">
+                <div class="card-header " >
                     <h2 class="box-title">Habitacion: @Model.Habitacion.Numero<span></span></h2>
                 </div>
-                <div class="box-body">
+                <div class="card-body">
                     <div class="form-group">
                         <h4>Actividades a Realizar:</h4>
                     </div>
@@ -21,8 +20,8 @@
                         <ul class="list-group list-group-unbordered">
                             @foreach (var item in Model.Habitacion.HabitacionActividad)
                             {
-                                <li class="list-group-item">
-                                    @item.Actividad.Descripcion
+                                <li class="list-group-item no-border">
+                                    <i class="fa fa-circle text-info text-sm mr-1" ></i>@item.Actividad.Descripcion
                                 </li>
                             }
                         </ul>
@@ -36,11 +35,41 @@
                         }
                     </div>
                 </div>
-                <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Limpieza Realizada</button>
+                <div class="card-footer d-flex justify-content-center ">
+                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary ">Limpieza Realizada</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 
+</div>
+@section Scripts{
+    <script>
+        var limpiezaViewModel = new Vue({
+            el: "#appLimpieza",
+            data: {
+                estadoHabitacionId: @Model.Habitacion.EstadoHabitacionId,
+                habitacionId: @Model.Habitacion.HabitacionId,
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow"
+                }
+            },
+            created: function () {
+                
+            },
+            methods: {
+                checkRealizarLimpieza: function () {
+                    this.$http.get("/api/Habitacion/CheckLimpiezaRealizada/" + this.habitacionId)
+                        .then(function (response) {
+                            this.estadoHabitacionId = response.body.estadoHabitacionId;
+                        })
+                }
+            }
+        });
+    </script>
+}

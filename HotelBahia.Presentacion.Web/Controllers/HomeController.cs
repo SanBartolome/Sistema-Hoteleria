@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HotelBahia.Presentacion.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using HotelBahia.Presentacion.Web.Models;
+using System.Diagnostics;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {

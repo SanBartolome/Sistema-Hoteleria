@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HotelBahia.BussinesLogic.Domain.Enums;
+﻿using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Servicios;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -24,12 +20,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
         public ActionResult HabitacionesAsignadas(int idEmpleado)
         {
             var response = _asignacionesService.HabitacionesAsignadas(idEmpleado)
-                .Select(x => new {
+                .Select(x => new
+                {
                     x.Numero,
                     x.HabitacionId,
                     x.EstadoHabitacionId,
                     Estado = Enum.GetName(typeof(HabitacionEstado), x.EstadoHabitacionId),
-                }) ;
+                });
             return Ok(response);
         }
     }

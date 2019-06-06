@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HotelBahia.DataAccess.Repositories
 {
@@ -14,8 +15,6 @@ namespace HotelBahia.DataAccess.Repositories
         protected readonly HoteleriaContext _context;
 
         private readonly DbSet<T> _dbSet;
-
-        public DbContext UnitOfWork { get => _context; }
 
         public Repository(HoteleriaContext context)
         {
@@ -37,7 +36,10 @@ namespace HotelBahia.DataAccess.Repositories
         {
             _context.Entry(entity).State = EntityState.Modified;
         }
-
+        public T Get(params object[] keyValues)
+        {
+            return _dbSet.Find(keyValues);
+        }
         public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
         {
             IEnumerable<T> query = _dbSet.Where(predicate);
@@ -53,5 +55,7 @@ namespace HotelBahia.DataAccess.Repositories
         {
             _context.SaveChanges();
         }
+
+        
     }
 }

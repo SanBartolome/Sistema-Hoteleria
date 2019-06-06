@@ -26,12 +26,15 @@ namespace HotelBahia.DataAccess.Repositories
                         .SingleOrDefault();
         }
 
-        public IEnumerable<AsignacionHabitacion> HabitacionesAsignadas(int idEmpleado)
+        public IEnumerable<Habitacion> HabitacionesAsignadas(int idEmpleado)
         {
             return _context.AsignacionHabitacion
                 .Include(x => x.Habitacion)
+                .ThenInclude(x => x.EstadoHabitacion)
                 .Where(x => x.EmpleadoId == idEmpleado)
-                .ToList();
+                .Select(x => x.Habitacion)
+                .Include(x => x.EstadoHabitacion);
+                
         }
     }
 }

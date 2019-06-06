@@ -35,7 +35,6 @@ namespace HotelBahia.BussinesLogic.Servicios
             {
                 return _asignacionesRepository
                     .HabitacionesAsignadas(idEmpleado)
-                    .Select(x => x.Habitacion)
                     .ToList();
             }
             catch (Exception)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HotelBahia.BussinesLogic.Contracts.Repositories;
-using HotelBahia.BussinesLogic.Servicios;
-using HotelBahia.Presentacion.Web.Helpers;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBahia.Presentacion.Web.Controllers
