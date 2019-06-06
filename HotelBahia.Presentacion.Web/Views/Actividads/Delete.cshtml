@@ -1,0 +1,37 @@
+﻿@model HotelBahia.BussinesLogic.Domain.Actividad
+
+@{
+    ViewData["Title"] = "Eliminar actividad";
+}
+
+<h3>¿Esta seguro de eliminar la actividad?</h3>
+<div>
+    <h4>Actividad</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <dt>
+            Tipo
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TipoActividad.Nombre)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ActividadId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Regresar a la lista</a>
+    </form>
+</div>
