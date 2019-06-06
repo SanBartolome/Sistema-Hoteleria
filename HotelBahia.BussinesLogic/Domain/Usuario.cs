@@ -6,6 +6,7 @@ namespace HotelBahia.BussinesLogic.Domain
 {
     public partial class Usuario
     {
+        [Required]
         public string UsuarioNombre { get; set; }
         [Required]
         public string Password { get; set; }

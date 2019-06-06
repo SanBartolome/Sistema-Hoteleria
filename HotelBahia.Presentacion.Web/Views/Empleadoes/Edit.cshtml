@@ -42,17 +42,17 @@
                 <span asp-validation-for="Sexo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuarioNombre" class="control-label"></label>
-                <input asp-for="UsuarioNombre" class="form-control" />
-                <span asp-validation-for="UsuarioNombre" class="text-danger"></span>
+                Usuario
+                <input asp-for="Usuario.UsuarioNombre" class="form-control" />
+                <span asp-validation-for="Usuario.UsuarioNombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Usuario.Password" class="control-label"></label>
+                Contraseña
                 <input asp-for="Usuario.Password" class="form-control" />
                 <span asp-validation-for="Usuario.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Usuario.RolId" class="control-label"></label>
+                Rol
                 <select asp-for="Usuario.RolId" class="form-control" asp-items="ViewBag.Rol"></select>
             </div>
             <div class="form-group">

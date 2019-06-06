@@ -67,15 +67,16 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EmpleadoId,Nombres,Apellidos,Direccion,Telefono,Correo,Sexo,UsuarioNombre")] Empleado empleado, [Bind("UsuarioNombre,Password,RolId")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(empleado);
+            /*if (ModelState.IsValid)
+            {*/
                 _context.Add(usuario);
+                empleado.UsuarioNombre = usuario.UsuarioNombre;
+                _context.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            /*}
             ViewData["Rol"] = new SelectList(_context.Rol, "RolId", "Nombre", usuario.UsuarioNombre);
-            return View(empleado);
+            return View(empleado);*/
         }
 
         // GET: Empleadoes/Edit/5
@@ -112,17 +113,18 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 return NotFound();
             }
 
-            if (empleado.UsuarioNombre == null)
+            if (usuario.UsuarioNombre == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 try
                 {
-                    _context.Update(empleado);
                     _context.Update(usuario);
+                    empleado.UsuarioNombre = usuario.UsuarioNombre;
+                    _context.Update(empleado);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -141,9 +143,9 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            /*}
             ViewData["Rol"] = new SelectList(_context.Rol, "RolId", "Nombre", usuario.RolId);
-            return View(empleado);
+            return View(empleado);*/
         }
 
         // GET: Empleadoes/Delete/5
