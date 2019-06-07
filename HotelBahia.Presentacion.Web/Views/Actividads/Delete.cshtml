@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Estado)
+            @ViewBag.EstadoNombre
         </dd>
         <dt>
             Tipo
@@ -31,7 +31,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="ActividadId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <input type="submit" value="Eliminar" class="btn btn-default" /> |
         <a asp-action="Index">Regresar a la lista</a>
     </form>
 </div>

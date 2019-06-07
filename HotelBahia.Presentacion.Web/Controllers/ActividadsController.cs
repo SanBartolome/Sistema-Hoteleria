@@ -30,12 +30,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
         public IActionResult Create()
         {
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre");
-            List<String> estados = new List<string>
-            {
-                "Activo",
-                "Inactivo"
-            };
-            ViewData["Estado"] = new SelectList(estados);
+            var estados = new SelectList(
+                new List<SelectListItem>
+                {
+                    new SelectListItem {Text = "1", Value = "Activo"},
+                    new SelectListItem {Text = "0", Value = "Inactivo"}
+                }, "Value", "Text");
+            ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
             return View();
         }
 
@@ -46,20 +47,21 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ActividadId,TipoActividadId,Descripcion,Estado")] Actividad actividad)
         {
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 _context.Add(actividad);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+            /*}
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre", actividad.TipoActividadId);
-            List<String> estados = new List<string>
-            {
-                "Activo",
-                "Inactivo"
-            };
-            ViewData["Estado"] = new SelectList(estados);
-            return View(actividad);
+            var estados = new SelectList(
+                new List<SelectListItem>
+                {
+                    new SelectListItem {Text = "1", Value = "Activo"},
+                    new SelectListItem {Text = "0", Value = "Inactivo"}
+                }, "Value", "Text");
+            ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
+            return View(actividad);*/
         }
 
         // GET: Actividads/Edit/5
@@ -76,12 +78,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 return NotFound();
             }
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre", actividad.TipoActividadId);
-            List<String> estados = new List<string>
-            {
-                "Activo",
-                "Inactivo"
-            };
-            ViewData["Estado"] = new SelectList(estados);
+            var estados = new SelectList(
+                new List<SelectListItem>
+                {
+                    new SelectListItem {Text = "1", Value = "Activo"},
+                    new SelectListItem {Text = "0", Value = "Inactivo"}
+                }, "Value", "Text");
+            ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
             return View(actividad);
         }
 
@@ -97,8 +100,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
                 try
                 {
                     _context.Update(actividad);
@@ -116,15 +119,16 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            /*}
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre", actividad.TipoActividadId);
-            List<String> estados = new List<string>
-            {
-                "Activo",
-                "Inactivo"
-            };
-            ViewData["Estado"] = new SelectList(estados);
-            return View(actividad);
+            var estados = new SelectList(
+                new List<SelectListItem>
+                {
+                    new SelectListItem {Text = "1", Value = "Activo"},
+                    new SelectListItem {Text = "0", Value = "Inactivo"}
+                }, "Value", "Text");
+            ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
+            return View(actividad);*/
         }
 
         // GET: Actividads/Delete/5
@@ -142,6 +146,11 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 return NotFound();
             }
+
+            if (actividad.Estado == 0)
+                ViewBag.EstadoNombre = "Inactivo";
+            if (actividad.Estado == 1)
+                ViewBag.EstadoNombre = "Activo";
 
             return View(actividad);
         }

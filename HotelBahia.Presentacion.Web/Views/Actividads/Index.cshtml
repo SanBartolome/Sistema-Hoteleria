@@ -29,7 +29,15 @@
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+
+                @if (item.Estado == 0)
+                {
+                <p>Inactivo</p>
+                }
+                @if (item.Estado == 1)
+                {
+                <p>Activo</p>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TipoActividad.Nombre)
