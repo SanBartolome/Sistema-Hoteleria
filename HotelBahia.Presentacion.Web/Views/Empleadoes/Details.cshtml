@@ -1,0 +1,70 @@
+﻿@model HotelBahia.BussinesLogic.Domain.Empleado
+
+@{
+    ViewData["Title"] = "Detalles del empleado";
+}
+
+<div>
+    <h4>Empleado</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombres)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombres)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Apellidos)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Apellidos)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Direccion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Direccion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Correo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Correo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sexo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sexo)
+        </dd>
+        <dt>
+            Usuario
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.UsuarioNombre)
+        </dd>
+        <dt>
+            Contraseña
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.Password)
+        </dd>
+        <dt>
+            Rol
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario.Rol.Nombre)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.EmpleadoId">Editar</a> |
+    <a asp-action="Index">Regresar a la lista</a>
+</div>
