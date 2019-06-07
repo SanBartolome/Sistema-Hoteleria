@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelBahia.BussinesLogic.Domain
 {
@@ -12,6 +13,7 @@ namespace HotelBahia.BussinesLogic.Domain
 
         public int ActividadId { get; set; }
         public int TipoActividadId { get; set; }
+        [Required]
         public string Descripcion { get; set; }
         public int Estado { get; set; }
 
