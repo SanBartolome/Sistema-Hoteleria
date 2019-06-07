@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HotelBahia.BussinesLogic.Contracts.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class HabitacionController : ControllerBase
     {

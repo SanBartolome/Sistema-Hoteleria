@@ -60,6 +60,14 @@ namespace HotelBahia.DataAccess.Repositories
              .Select(x => x.Actividad);
         }
 
+        public Habitacion ObtenerConActividades(int idHabitacion)
+        {
+            return _context.Habitacion
+                    .Include(x => x.HabitacionActividad)
+                    .ThenInclude(x => x.Actividad)
+                    .Single(x => x.HabitacionId == idHabitacion);
+        }
+
         public Habitacion ObtenerConActividades(int idHabitacion, int tipoActividadId)
         {
             return _context.Habitacion

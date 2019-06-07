@@ -1,0 +1,7 @@
+{
+  "name": "hotel-bahia",
+  "version": "1.0.0",
+  "devDependencies": {
+    "vue": "^2.6.9"
+  }
+}

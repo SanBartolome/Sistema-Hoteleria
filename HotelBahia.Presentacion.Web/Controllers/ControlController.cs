@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using HotelBahia.BussinesLogic.Servicios;
-using HotelBahia.Presentacion.Web.Models;
-using HotelBahia.Presentacion.Web.Models.Estados;
-using Microsoft.AspNetCore.Http;
+﻿using HotelBahia.BussinesLogic.Servicios;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {

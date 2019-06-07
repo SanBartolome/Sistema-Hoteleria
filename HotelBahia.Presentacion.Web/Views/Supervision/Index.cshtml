@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "Supervision de Habitaciones";
+}
+
+<div id="appSupervision" class="container-fluid">
+    <div class="card card-outline card-info">
+        <div class="card-header">
+            Habitaciones Asignadas
+        </div>
+    </div>
+    <div class="box-habitacions-wrapper">
+        <div v-for="hab in habitacionesAsignadas">
+            <div class="small-box box-habitacion">
+                <div class="inner">
+                    <h3>{{hab.numero}}</h3>
+                    <p class="text-info" v-bind:class="'text-' + colorState[hab.estadoHabitacionId]">{{hab.estadoHabitacion.estadoNombre}}</p>
+                </div>
+                <a v-bind:href="'Supervision/' + hab.habitacionId" v-on:click="checkOut(hab)" class="small-box-footer " v-if="hab.estadoHabitacionId == 5" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]">Supervisar<i class="ml-2 fa fa-arrow-circle-right"></i></a>
+                <div v-else class="small-box-footer" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var supervisionViewModel = new Vue({
+            el: "#appSupervision",
+            data: {
+                habitacionesAsignadas: [],
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow"
+                }
+            },
+            created: function () {
+                this.getHabitacionesAsignadas();
+            },
+            methods: {
+                getHabitacionesAsignadas: function () {
+                    this.$http.get('/api/asignaciones/HabitacionesAsignadas/' + 3)
+                        .then(function (response) {
+                            console.log(response);
+                            this.habitacionesAsignadas = response.body
+                        });
+                }
+            }
+        });
+    </script>
+}

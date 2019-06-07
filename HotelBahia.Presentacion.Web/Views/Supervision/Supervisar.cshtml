@@ -1,0 +1,100 @@
+﻿
+@using HotelBahia.BussinesLogic.Domain;
+@using Newtonsoft.Json;
+@model Habitacion
+@{
+    ViewData["Title"] = "Supervisar";
+}
+
+<div id="appSupervisar">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="co-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Nro Habitacion: @Model.Numero</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li v-for="item in listActividad">
+                                {{item.actividad.descripcion}}
+                                <select  v-model="item.estado">
+                                    <option v-for="option in options" v-bind:value="option.value">
+                                        {{ option.text }}
+                                    </option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" v-on:click="CheckLimpiezaIncompleta()">Limpieza Incompleta</button>
+                        <button class="btn btn-primary" v-on:click="HabilitarHabitacion()">Habilitar Habitacion</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+
+        var supervisionViewModel = new Vue({
+            el: "#appSupervisar",
+            
+            data: {
+                idHabitacion: @Model.HabitacionId,
+                options: [
+                  { text: 'Bueno', value: 1 },
+                  { text: 'Regular', value: 2 },
+                  { text: 'Malo', value: 3 }
+                ],
+                listActividad: [],
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow"
+                }
+            },
+            created: function () {
+                this.getItemsActividades();
+            },
+            methods: {
+                getItemsActividades: function () {
+                    this.$http.get("/api/Tareas/ItemsTareas/", { params: { idHabitacion: this.idHabitacion, tipoTarea: 3 } })
+                        .then(function (response) {
+                            console.log(response);
+                            this.listActividad = response.body;
+                            console.log(this.listActividad);
+                        })
+                },
+                checkSupervisar: function () {
+                    this.$http.post("/api/Tareas/RegistrarSupervision/", this.listActividad)
+                    .then(function (response) {
+                        console.log(response);
+                        //this.estadoHabitacionId = response.body.estadoHabitacionId;
+                    })
+                },
+                CheckLimpiezaIncompleta: function () {
+                    this.checkSupervisar();
+                    this.$http.get("/api/Habitacion/CheckLimpiezaIncompleta/" + this.idHabitacion)
+                    .then(function (response) {
+                        console.log(response);
+                        //this.estadoHabitacionId = response.body.estadoHabitacionId;
+                    })
+                },
+                HabilitarHabitacion: function () {
+                this.checkSupervisar();
+                this.$http.get("/api/Habitacion/HabilitarHabitacion/" + this.idHabitacion)
+                    .then(function (response) {
+                        console.log(response);
+                        //this.estadoHabitacionId = response.body.estadoHabitacionId;
+                    })
+                }
+
+            }
+        });
+    </script>
+}

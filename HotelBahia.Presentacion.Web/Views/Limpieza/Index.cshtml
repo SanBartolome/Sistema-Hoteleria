@@ -2,30 +2,24 @@
 @{
     ViewData["Title"] = "Limpieza de Habitaciones";
 }
-
     <div id="appLimpieza" class="container-fluid">
         <div class="card card-outline card-info">
             <div class="card-header">
                 Habitaciones Asignadas
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div v-for="hab in habitacionesAsignadas" class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
-                        <div class="small-box bg-purple" >
-                            <div class="inner">
-                                <h3>{{hab.numero}}</h3>
-                                <p>{{hab.estado}}</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-broom"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">Atender<i class="ml-2 fa fa-arrow-circle-right"></i></a>
-                        </div>
+        </div>
+        <div class="box-habitacions-wrapper">
+            <div v-for="hab in habitacionesAsignadas">
+                <div class="small-box box-habitacion">
+                    <div class="inner">
+                        <h3>{{hab.numero}}</h3>
+                        <p class="text-info" v-bind:class="'text-' + colorState[hab.estadoHabitacionId]">{{hab.estadoHabitacion.estadoNombre}}</p>
                     </div>
+                    <a v-bind:href="'Limpieza/' + hab.habitacionId"  v-on:click="checkOut(hab)" class="small-box-footer " v-if="hab.estadoHabitacionId == 3 || hab.estadoHabitacionId == 6" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]">Realizar Limpieza<i class="ml-2 fa fa-arrow-circle-right"></i></a>
+                    <div v-else class="small-box-footer" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]"></div>
                 </div>
             </div>
         </div>
-        
     </div>
 
 @section Scripts{ 
@@ -33,17 +27,36 @@
         var limpiezaViewModel = new Vue({
             el: "#appLimpieza",
             data: {
-                habitacionesAsignadas: [] 
+                habitacionesAsignadas: [],
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow"
+                }
             },
             created: function () {
                 this.getHabitacionesAsignadas();
             },
             methods: {
                 getHabitacionesAsignadas: function () {
-                    this.$http.get('/api/Asignaciones/HabitacionesAsignadas', { params: { idEmpleado: 3 } })
+                    this.$http.get('/api/asignaciones/HabitacionesAsignadas/' + 3)
                         .then(function (response) {
+                            console.log(response.body);
                             this.habitacionesAsignadas = response.body
                         });
+                },
+                checkOut: function ($this) {
+                    this.$http.get('api/Habitacion/Checkout/' + $this.habitacionId)
+                        .then(function (response) {
+                            //this.getListHabitaciones();
+                            console.log(this);
+                        },
+                    function (response) {
+                        console.log(response);
+                    });
                 }
             }
         });

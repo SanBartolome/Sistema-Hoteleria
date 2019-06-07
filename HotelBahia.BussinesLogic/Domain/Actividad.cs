@@ -16,6 +16,6 @@ namespace HotelBahia.BussinesLogic.Domain
         public int Estado { get; set; }
 
         public TipoActividad TipoActividad { get; set; }
-        public ICollection<HabitacionActividad> HabitacionActividad { get; set; }
+        public virtual ICollection<HabitacionActividad> HabitacionActividad { get; set; }
     }
 }

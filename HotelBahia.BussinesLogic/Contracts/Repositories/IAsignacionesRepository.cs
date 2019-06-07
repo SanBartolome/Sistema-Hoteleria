@@ -6,6 +6,6 @@ namespace HotelBahia.BussinesLogic.Contracts.Repositories
     public interface IAsignacionesRepository
     {
         AsignacionHabitacion EmpleadoAsignadoPorRol(int idHabitacion, int idRol);
-        IEnumerable<AsignacionHabitacion> HabitacionesAsignadas(int idEmpleado);
+        IEnumerable<Habitacion> HabitacionesAsignadas(int idEmpleado);
     }
 }

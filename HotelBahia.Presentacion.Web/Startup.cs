@@ -1,5 +1,4 @@
-﻿using System;
-using HotelBahia.BussinesLogic.Contracts.Repositories;
+﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
 using HotelBahia.BussinesLogic.Servicios;
 using HotelBahia.DataAccess.Context;
 using HotelBahia.DataAccess.Repositories;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace HotelBahia.Presentacion.Web
 {
@@ -44,6 +44,7 @@ namespace HotelBahia.Presentacion.Web
             var connection = @"Server=DESKTOP-GR17ES1\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;Trusted_Connection=True;";
             services.AddScoped<IHabitacionRepository, HabitacionRepository>();
             services.AddScoped<IAsignacionesRepository, AsignacionesRepository>();
+            services.AddScoped<ITareaRepository, TareaRepository>();
             services.AddDbContext<HoteleriaContext>
                 (options => options.UseSqlServer(connection));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -66,7 +67,8 @@ namespace HotelBahia.Presentacion.Web
             app.UseStaticFiles();
             app.UseSession();
             app.UseCookiePolicy();
-
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

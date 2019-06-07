@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotelBahia.BussinesLogic.Domain
 {
@@ -11,8 +12,9 @@ namespace HotelBahia.BussinesLogic.Domain
             AsignacionHabitacion = new HashSet<AsignacionHabitacion>();
             HabitacionActividad = new HashSet<HabitacionActividad>();
         }
-
+        
         public int HabitacionId { get; set; }
+        [Required]
         public int? Numero { get; set; }
         public int? Piso { get; set; }
         public int? EstadoHabitacionId { get; set; }

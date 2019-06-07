@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.Habitacion>
+
+@{
+    ViewData["Title"] = "Lista de Habitaciónes";
+}
+<p>
+    <a class="btn btn-lg btn-primary" asp-action="Create">Nuevo</a>
+</p>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Numero)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Piso)
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+                        <th>
+                            Tipo
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Numero)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Piso)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EstadoHabitacion.EstadoNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoHabitacion.Nombre)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.HabitacionId">Editar</a> |
+                                @*<a asp-action="Details" asp-route-id="@item.HabitacionId">Details</a>*@ 
+                                <a asp-action="Delete" asp-route-id="@item.HabitacionId">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
