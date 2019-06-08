@@ -1,6 +1,7 @@
 ﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.BussinesLogic.Domain.Enums;
+using HotelBahia.BussinesLogic.Servicios.AppServices;
 using HotelBahia.DataAccess.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,15 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
     {
         private readonly HoteleriaContext _context;
         private readonly IHabitacionRepository _habitacionRepository;
+        private readonly IAsignacionesRepository _asignacionesRepository;
 
-        public HabitacionController(IHabitacionRepository habitacionRepository, HoteleriaContext context)
+        public HabitacionController(IHabitacionRepository habitacionRepository,
+            IAsignacionesRepository asignacionesRepository,
+            HoteleriaContext context)
         {
             _context = context;
             _habitacionRepository = habitacionRepository;
+            _asignacionesRepository = asignacionesRepository;
         }
 
         // GET: api/Habitacion
@@ -138,8 +143,8 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
-            //var empleado = new AsignacionesService(_asignacionesRepository).EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
-            //new NotificacionService().Notificar(empleado, habitacion, ActividadTipo.Limpieza);
+            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+            new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
             return Ok(habitacion);
 
         }
@@ -162,6 +167,8 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaRealizada;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
+            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.Supervisor);
+            new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Supervision);
             return Ok(habitacion);
         }
 
@@ -183,6 +190,8 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaIncompleta;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
+            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+            new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
             return Ok(habitacion);
         }
 

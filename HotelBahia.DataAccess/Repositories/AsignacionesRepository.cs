@@ -19,11 +19,11 @@ namespace HotelBahia.DataAccess.Repositories
 
         public AsignacionHabitacion EmpleadoAsignadoPorRol(int idHabitacion, int idRol)
         {
+            
             return _context.AsignacionHabitacion
                 .Include(x => x.Empleado)
-                    .ThenInclude(x => x.Usuario)
-                        .Where(x => x.Empleado.Usuario.RolId == idRol && x.HabitacionId == idHabitacion)
-                        .SingleOrDefault();
+                .Where(x => x.RolId == idRol && x.HabitacionId == idHabitacion)
+                .SingleOrDefault();
         }
 
         public IEnumerable<Habitacion> HabitacionesAsignadas(int idEmpleado)
@@ -34,7 +34,6 @@ namespace HotelBahia.DataAccess.Repositories
                 .Where(x => x.EmpleadoId == idEmpleado)
                 .Select(x => x.Habitacion)
                 .Include(x => x.EstadoHabitacion);
-                
         }
     }
 }

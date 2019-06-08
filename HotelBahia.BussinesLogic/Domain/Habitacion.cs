@@ -19,6 +19,7 @@ namespace HotelBahia.BussinesLogic.Domain
         public int? Piso { get; set; }
         public int? EstadoHabitacionId { get; set; }
         public int? TipoHabitacionId { get; set; }
+        public bool IsDelete { get; set; }
 
         public EstadoHabitacion EstadoHabitacion { get; set; }
         public TipoHabitacion TipoHabitacion { get; set; }

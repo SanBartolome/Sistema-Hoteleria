@@ -1,9 +1,7 @@
-﻿@using HotelBahia.Presentacion.Web.Helpers
-
+﻿
 @model RealizarLimpiezaViewModel;
 @{
     ViewData["Title"] = "Realizar Limpieza";
-    var msj = ViewData["Mensaje"] as Message;
 }
 <div class="container-fluid">
     <div id="appLimpieza" class="row">
@@ -25,14 +23,6 @@
                                 </li>
                             }
                         </ul>
-                    </div>
-                    <div>
-                        @if (msj != null)
-                        {
-                            <div class="callout callout-@msj.Tipo.ToString()">
-                                <p>@msj.Contenido</p>
-                            </div>
-                        }
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-center ">

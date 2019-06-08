@@ -35,6 +35,8 @@ namespace HotelBahia.DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
             modelBuilder.Entity<Actividad>(entity =>
             {
                 entity.Property(e => e.ActividadId).HasColumnName("ActividadID");
@@ -50,6 +52,8 @@ namespace HotelBahia.DataAccess.Context
                     .HasForeignKey(d => d.TipoActividadId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Actividad_TipoActividad");
+
+               
             });
 
             modelBuilder.Entity<AsignacionHabitacion>(entity =>
@@ -104,13 +108,8 @@ namespace HotelBahia.DataAccess.Context
                     .IsUnicode(false);
 
                 entity.Property(e => e.UsuarioNombre)
-                    .HasMaxLength(20)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Usuario)
-                    .WithOne(p => p.Empleado)
-                    .HasForeignKey<Empleado>(d => d.UsuarioNombre)
-                    .HasConstraintName("FK_Empleado_Usuario");
             });
 
             modelBuilder.Entity<EstadoHabitacion>(entity =>
@@ -139,6 +138,8 @@ namespace HotelBahia.DataAccess.Context
                     .WithMany(p => p.Habitacion)
                     .HasForeignKey(d => d.TipoHabitacionId)
                     .HasConstraintName("FK_Habitacion_TipoHabitacion");
+
+                entity.HasQueryFilter(x => !x.IsDelete);
             });
 
             modelBuilder.Entity<HabitacionActividad>(entity =>

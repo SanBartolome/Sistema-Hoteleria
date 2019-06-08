@@ -1,9 +1,0 @@
-[
-  {
-    "outputFileName": "wwwroot/css/style.min.css",
-    "sourceMap": true,
-    "inputFiles": [
-      "wwwroot/css/style.css"
-    ]
-  }
-]

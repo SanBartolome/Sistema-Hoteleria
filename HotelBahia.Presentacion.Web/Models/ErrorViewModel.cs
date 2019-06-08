@@ -1,3 +1,5 @@
+using System;
+
 namespace HotelBahia.Presentacion.Web.Models
 {
     public class ErrorViewModel

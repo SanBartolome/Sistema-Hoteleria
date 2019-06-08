@@ -1,8 +1,11 @@
 ﻿using HotelBahia.BussinesLogic.Domain;
+using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.DataAccess.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,8 +64,43 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(habitacion);
-                await _context.SaveChangesAsync();
+                if(!_context.Habitacion.Any(x => x.Numero == habitacion.Numero))
+                {
+
+                    using (var transaction = _context.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            _context.Add(habitacion);
+                            await _context.SaveChangesAsync();
+
+                            var actividadesLimpieza = _context.Actividad.Where(x => x.TipoActividadId == (int)ActividadTipo.Limpieza);
+
+                            var listHabAct = new List<HabitacionActividad>();
+                            foreach (var item in actividadesLimpieza)
+                            {
+                                var actHab = new HabitacionActividad()
+                                {
+                                    ActividadId = item.ActividadId,
+                                    HabitacionId = habitacion.HabitacionId,
+                                    Estado = 1
+                                };
+                                listHabAct.Add(actHab);
+                            }
+                            if(listHabAct.Count > 0)
+                            {
+                                _context.HabitacionActividad.AddRange(listHabAct);
+                                await _context.SaveChangesAsync();
+                            }
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            // TODO: Handle failure
+                        }
+                    }
+
+                }
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EstadoHabitacion"] = new SelectList(_context.EstadoHabitacion, "EstadoHabitacionId", "EstadoNombre", habitacion.EstadoHabitacionId);
@@ -151,7 +189,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var habitacion = await _context.Habitacion.FindAsync(id);
-            _context.Habitacion.Remove(habitacion);
+            habitacion.IsDelete = true;
+            _context.Update(habitacion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

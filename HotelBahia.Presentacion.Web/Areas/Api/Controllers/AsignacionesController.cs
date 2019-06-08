@@ -13,9 +13,11 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
     public class AsignacionesController : ControllerBase
     {
         private readonly IAsignacionesRepository _asignacionesRepository;
-        public AsignacionesController(IAsignacionesRepository asignacionesRepository)
+        private readonly IEmpleadoRepository _empleadoRepository;
+        public AsignacionesController(IAsignacionesRepository asignacionesRepository, IEmpleadoRepository empleadoRepository)
         {
             _asignacionesRepository = asignacionesRepository;
+            _empleadoRepository = empleadoRepository;
         }
         [HttpGet("[action]/{idEmpleado}")]
         public ActionResult HabitacionesAsignadas([FromRoute] int idEmpleado)
@@ -24,7 +26,11 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var habitacionesAsignadas = _asignacionesRepository.HabitacionesAsignadas(idEmpleado);
+
+            var username = User.Identity.Name;
+            var empleado = _empleadoRepository.Find(x => x.UsuarioNombre == username).SingleOrDefault();
+
+            var habitacionesAsignadas = _asignacionesRepository.HabitacionesAsignadas(empleado.EmpleadoId);
             if (habitacionesAsignadas == null)
             {
                 return NotFound();

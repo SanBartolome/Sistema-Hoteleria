@@ -23,8 +23,6 @@ namespace HotelBahia.BussinesLogic.Domain
         public string Sexo { get; set; }
         [Required]
         public string UsuarioNombre { get; set; }
-
-        public Usuario Usuario { get; set; }
         public ICollection<AsignacionHabitacion> AsignacionHabitacion { get; set; }
     }
 }

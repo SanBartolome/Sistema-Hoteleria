@@ -1,15 +1,23 @@
-﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
-using HotelBahia.BussinesLogic.Servicios;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HotelBahia.BussinesLogic.Contracts.Repositories;
 using HotelBahia.DataAccess.Context;
 using HotelBahia.DataAccess.Repositories;
+using HotelBahia.Presentacion.Web.Data;
+using HotelBahia.Presentacion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace HotelBahia.Presentacion.Web
 {
@@ -25,29 +33,51 @@ namespace HotelBahia.Presentacion.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<AsignacionesService>();
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                // Make the session cookie essential
-                options.Cookie.IsEssential = true;
-            });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            var connection = @"Server=DESKTOP-GR17ES1\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;Trusted_Connection=True;";
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Expiration = TimeSpan.FromDays(150);
+                // If the LoginPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/Login.
+                options.LoginPath = "/Account/Login";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/AccessDenied.
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+            services.AddDbContext<LoginContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("HotelBahiaConexion")));
+
             services.AddScoped<IHabitacionRepository, HabitacionRepository>();
             services.AddScoped<IAsignacionesRepository, AsignacionesRepository>();
             services.AddScoped<ITareaRepository, TareaRepository>();
+            services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
             services.AddDbContext<HoteleriaContext>
-                (options => options.UseSqlServer(connection));
+                (options => options.UseSqlServer(Configuration.GetConnectionString("HotelBahiaConexion")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddIdentity<UserLogin, IdentityRole>()
+                .AddEntityFrameworkStores<LoginContext>()
+                .AddDefaultTokenProviders();
+
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,10 +95,9 @@ namespace HotelBahia.Presentacion.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
             app.UseCookiePolicy();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
