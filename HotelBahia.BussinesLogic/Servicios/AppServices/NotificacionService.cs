@@ -43,7 +43,7 @@ namespace HotelBahia.BussinesLogic.Servicios.AppServices
                     mensaje.Subject="Notificación de Limpieza";
                     mensajeinterno = string.Format(@"Por favor, acudir a la habitación {0} para empezar el proceso de limpieza.<br>
                     Para realizar la limpieza de clic en el boton", habitacion.Numero);
-                    url = Host + "Limpieza/RealizarLimpieza/" + habitacion.HabitacionId;
+                    url = Host + "Limpieza/" + habitacion.HabitacionId;
                     mensaje.Body=notificacionHMTL(empleado.Nombres, mensajeinterno, url, "Realizar Limpieza");
                     break;
                 case ActividadTipo.Mantenimieto:
@@ -51,7 +51,7 @@ namespace HotelBahia.BussinesLogic.Servicios.AppServices
                     break;
                 case ActividadTipo.Supervision:
                     mensaje.Subject = "Notificación de Supervision";
-                    url = Host + "Supervision/Supervisar/" + habitacion.HabitacionId;
+                    url = Host + "Supervision/" + habitacion.HabitacionId;
                     mensajeinterno = string.Format(@"Se ha ejecutado el proceso de limpieza en la habitacion {0}<br> Para supervisar de clic en el boton", habitacion.Numero);
                     mensaje.Body = notificacionHMTL(empleado.Nombres, mensajeinterno, url, "Supervisar Habitacion");
                     break;

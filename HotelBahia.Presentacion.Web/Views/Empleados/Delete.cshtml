@@ -1,10 +1,12 @@
 ﻿@model HotelBahia.BussinesLogic.Domain.Empleado
 
 @{
-    ViewData["Title"] = "Eliminar empleado";
+    ViewData["Title"] = "Delete";
 }
 
-<h3>¿Seguro que quiere eliminar al empleado?</h3>
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Empleado</h4>
     <hr />
@@ -46,28 +48,16 @@
             @Html.DisplayFor(model => model.Sexo)
         </dd>
         <dt>
-            Usuario
-        </dt>
-        @*<dd>
-            @Html.DisplayFor(model => model.Usuario.UsuarioNombre)
-        </dd>
-        <dt>
-            Contraseña
+            @Html.DisplayNameFor(model => model.UsuarioNombre)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Usuario.Password)
+            @Html.DisplayFor(model => model.UsuarioNombre)
         </dd>
-        <dt>
-            Rol
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Usuario.Rol.Nombre)
-        </dd>*@
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="EmpleadoId" />
-        <input type="submit" value="Eliminar" class="btn btn-default" /> |
-        <a asp-action="Index">Regresar a la lista</a>
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

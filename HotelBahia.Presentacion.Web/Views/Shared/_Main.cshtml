@@ -85,6 +85,24 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a asp-controller="Asignaciones" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-th"></i>
+                                        <p>
+                                            Asignaciones de Hab.
+                                            <!--<span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="AsignacionesSupervisor" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-th"></i>
+                                        <p>
+                                            Asignaciones Super.
+                                            <!--<span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a asp-controller="Habitacions" asp-action="Index" class="nav-link">
                                         <i class="nav-icon fa fa-th"></i>
                                         <p>
@@ -93,6 +111,25 @@
                                         </p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Empleados" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-th"></i>
+                                        <p>
+                                            Mant. Usuarios
+                                            <!--<span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Actividads" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-th"></i>
+                                        <p>
+                                            Mant. Actividades
+                                            <!--<span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+
                             }
                             if (User.IsInRole("Limpieza"))
                             {

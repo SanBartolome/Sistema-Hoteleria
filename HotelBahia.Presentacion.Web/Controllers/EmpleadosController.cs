@@ -7,33 +7,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
-using HotelBahia.Presentacion.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using HotelBahia.Presentacion.Web.Models;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class EmpleadoesController : Controller
+    public class EmpleadosController : Controller
     {
         private readonly HoteleriaContext _context;
         private readonly UserManager<UserLogin> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        
-
-        public EmpleadoesController(HoteleriaContext context, UserManager<UserLogin> userManager, RoleManager<IdentityRole> roleManager)
+        public EmpleadosController(HoteleriaContext context, UserManager<UserLogin> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-        // GET: Empleadoes
+        // GET: Empleados
         public async Task<IActionResult> Index()
         {
-            var hoteleriaContext = _context.Empleado;
-            return View(await hoteleriaContext.ToListAsync());
+            return View(await _context.Empleado.ToListAsync());
         }
 
-        // GET: Empleadoes/Details/5
+        // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,14 +40,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
 
             var empleado = await _context.Empleado
                 .FirstOrDefaultAsync(m => m.EmpleadoId == id);
-            var usuario = await _context.Usuario
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(m => m.UsuarioNombre == empleado.UsuarioNombre);
             if (empleado == null)
-            {
-                return NotFound();
-            }
-            if (usuario == null)
             {
                 return NotFound();
             }
@@ -58,37 +48,36 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
-        // GET: Empleadoes/Create
+        // GET: Empleados/Create
         public IActionResult Create()
         {
-            ViewData["Rol"] = new SelectList(_context.Rol, "RolId", "Nombre");
             return View();
         }
 
-        // POST: Empleadoes/Create
+        // POST: Empleados/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EmpleadoViewModel empleado)
+        public async Task<IActionResult> Create([Bind("EmpleadoId,Nombres,Apellidos,Direccion,Telefono,Correo,Sexo,UsuarioNombre")] Empleado empleado, string password, string rolId)
         {
+            var user = new UserLogin { UserName = empleado.UsuarioNombre, Email = empleado.Correo };
+            var result = await _userManager.CreateAsync(user, password);
 
-            var user = new UserLogin { UserName = empleado.Empleado.UsuarioNombre, Email = empleado.Empleado.Correo };
-            var result = await _userManager.CreateAsync(user, empleado.Usuario.Password);
-            
             user = await _userManager.FindByNameAsync(user.UserName);
-            var role = await _roleManager.FindByIdAsync(empleado.Usuario.RolId.ToString());
+            var role = await _roleManager.FindByIdAsync(rolId);
             await _userManager.AddToRoleAsync(user, role.Name);
 
             if (result.Succeeded)
             {
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return View(empleado);
         }
 
-        // GET: Empleadoes/Edit/5
+        // GET: Empleados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -97,42 +86,29 @@ namespace HotelBahia.Presentacion.Web.Controllers
             }
 
             var empleado = await _context.Empleado.FindAsync(id);
-            var usuario = await _context.Usuario.FindAsync(empleado.UsuarioNombre);
             if (empleado == null)
             {
                 return NotFound();
             }
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-            ViewData["Rol"] = new SelectList(_context.Rol, "RolId", "Nombre", usuario.RolId);
             return View(empleado);
         }
 
-        // POST: Empleadoes/Edit/5
+        // POST: Empleados/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpleadoId,Nombres,Apellidos,Direccion,Telefono,Correo,Sexo,UsuarioNombre")] Empleado empleado, [Bind("UsuarioNombre,Password,RolId")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("EmpleadoId,Nombres,Apellidos,Direccion,Telefono,Correo,Sexo,UsuarioNombre")] Empleado empleado)
         {
             if (id != empleado.EmpleadoId)
             {
                 return NotFound();
             }
 
-            if (usuario.UsuarioNombre == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
-            }
-
-            /*if (ModelState.IsValid)
-            {*/
                 try
                 {
-                    _context.Update(usuario);
-                    empleado.UsuarioNombre = usuario.UsuarioNombre;
                     _context.Update(empleado);
                     await _context.SaveChangesAsync();
                 }
@@ -142,22 +118,17 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     {
                         return NotFound();
                     }
-                    else if (!UsuarioExists(usuario.UsuarioNombre))
-                    {
-                        return NotFound();
-                    }
                     else
                     {
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            /*}
-            ViewData["Rol"] = new SelectList(_context.Rol, "RolId", "Nombre", usuario.RolId);
-            return View(empleado);*/
+            }
+            return View(empleado);
         }
 
-        // GET: Empleadoes/Delete/5
+        // GET: Empleados/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -167,9 +138,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
 
             var empleado = await _context.Empleado
                 .FirstOrDefaultAsync(m => m.EmpleadoId == id);
-            var usuario = await _context.Usuario
-                .Include(u => u.Rol)
-                .FirstOrDefaultAsync(m => m.UsuarioNombre == empleado.UsuarioNombre);
             if (empleado == null)
             {
                 return NotFound();
@@ -178,15 +146,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
-        // POST: Empleadoes/Delete/5
+        // POST: Empleados/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var empleado = await _context.Empleado.FindAsync(id);
-            var usuario = await _context.Usuario.FindAsync(empleado.UsuarioNombre);
             _context.Empleado.Remove(empleado);
-            _context.Usuario.Remove(usuario);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -194,11 +160,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
         private bool EmpleadoExists(int id)
         {
             return _context.Empleado.Any(e => e.EmpleadoId == id);
-        }
-
-        private bool UsuarioExists(string usuarioNombre)
-        {
-            return _context.Usuario.Any(u => u.UsuarioNombre == usuarioNombre);
         }
     }
 }
