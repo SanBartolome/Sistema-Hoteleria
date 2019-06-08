@@ -1,12 +1,10 @@
 ﻿@model HotelBahia.BussinesLogic.Domain.AsignacionHabitacion
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar asignacion";
 }
 
-<h2>Edit</h2>
-
-<h4>AsignacionHabitacion</h4>
+<h4>Asignacion de Habitacion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,7 +22,7 @@
                 <span asp-validation-for="HabitacionId" class="text-danger"></span>
             </div>
             <div class="form-group d-none">
-                <label asp-for="RolId" class="control-label"></label>
+                <label asp-for="RolId" class="control-label">Rol</label>
                 <input asp-for="RolId" class="form-control" />
                 <span asp-validation-for="RolId" class="text-danger"></span>
             </div>
@@ -34,13 +32,13 @@
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Guardar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar a la lista</a>
 </div>
 

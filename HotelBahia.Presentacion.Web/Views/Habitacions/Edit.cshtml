@@ -1,11 +1,9 @@
 ﻿@model HotelBahia.BussinesLogic.Domain.Habitacion
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar habitacion";
     
 }
-
-<h2>Edit</h2>
 
 <h4>Habitacion</h4>
 <hr />
@@ -25,23 +23,23 @@
                 <span asp-validation-for="Piso" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EstadoHabitacionId" class="control-label"></label>
+                <label asp-for="EstadoHabitacionId" class="control-label">Estado</label>
                 <select asp-for="EstadoHabitacionId" class="form-control" asp-items="ViewBag.EstadoHabitacion"></select>
                 <span asp-validation-for="EstadoHabitacionId" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="TipoHabitacionId" class="control-label"></label>
+            <div class="form-group">
+                <label asp-for="TipoHabitacionId" class="control-label">Tipo</label>
                 <select asp-for="TipoHabitacionId" class="form-control" asp-items=" ViewBag.TipoHabitacionId"></select>
                 <span asp-validation-for="TipoHabitacionId" class="text-danger"></span>
-            </div>*@
+            </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Guardar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar a la lista</a>
 </div>
 

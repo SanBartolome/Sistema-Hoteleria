@@ -1,10 +1,8 @@
 ﻿@model HotelBahia.BussinesLogic.Domain.Empleado
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear empleado";
 }
-
-<h2>Create</h2>
 
 <h4>Empleado</h4>
 <hr />
@@ -43,12 +41,12 @@
                 <span asp-validation-for="Sexo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsuarioNombre" class="control-label"></label>
+                <label asp-for="UsuarioNombre" class="control-label">Usuario</label>
                 <input asp-for="UsuarioNombre" class="form-control" />
                 <span asp-validation-for="UsuarioNombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Contraseña</label>
                 <input type="Text" name="password" class="form-control" />
             </div>
             <div class="form-group">
@@ -56,14 +54,14 @@
                 <input type="text" name="rolId" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Crear" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar a la lista</a>
 </div>
 
 @section Scripts {

@@ -1,10 +1,8 @@
 ﻿@model HotelBahia.BussinesLogic.Domain.Habitacion
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de la habitacion";
 }
-
-<h2>Details</h2>
 
 <div>
     <h4>Habitacion</h4>
@@ -23,13 +21,13 @@
             @Html.DisplayFor(model => model.Piso)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EstadoHabitacion)
+            Estado
         </dt>
         <dd>
             @Html.DisplayFor(model => model.EstadoHabitacion.EstadoHabitacionId)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.TipoHabitacion)
+            Tipo
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TipoHabitacion.TipoHabitacionId)
@@ -37,6 +35,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.HabitacionId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.HabitacionId">Editar</a> |
+    <a asp-action="Index">Regresa a la lista</a>
 </div>
