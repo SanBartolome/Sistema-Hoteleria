@@ -1,4 +1,5 @@
 ﻿using HotelBahia.BussinesLogic.Contracts.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBahia.Presentacion.Web.Controllers
@@ -10,6 +11,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             _habitacionRepository = habitacionRepository;
         }
+
+        [Authorize(Roles = "Administrador")]
         public IActionResult Index()
         {
             return View();
@@ -18,18 +21,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
         [HttpPost]
         public IActionResult CheckOut(int nroHabitacion)
         {
-            //Message msj = new Message();
-            //if (_habitacionService.CheckOut(_habitacionService.BuscarPorNro(nroHabitacion)))
-            //{
-            //    msj.Tipo = MessageType.success;
-            //    msj.Contenido = "Se realizó el CheckOut de la Habitacion " + nroHabitacion;
-            //}
-            //else
-            //{
-            //    msj.Tipo = MessageType.danger;
-            //    msj.Contenido = string.Format("La Habitacion {0} no puede realizar CheckOut", nroHabitacion);
-            //}
-            //ViewData["Mensaje"] = msj;
             return View("Index");
         }
     }

@@ -1,0 +1,33 @@
+﻿@model HotelBahia.BussinesLogic.Domain.AsignacionHabitacion
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>AsignacionHabitacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+       <dt>
+            @Html.DisplayNameFor(model => model.Empleado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empleado.UsuarioNombre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Habitacion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Habitacion.Numero)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="AsignacionHabitacionId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

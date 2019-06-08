@@ -63,7 +63,7 @@
             },
             methods: {
                 getItemsActividades: function () {
-                    this.$http.get("/api/Tareas/ItemsTareas/", { params: { idHabitacion: this.idHabitacion, tipoTarea: 3 } })
+                    this.$http.get("/api/Tareas/ItemsTareas/", { params: { idHabitacion: this.idHabitacion, tipoTarea: 2 } })
                         .then(function (response) {
                             console.log(response);
                             this.listActividad = response.body;

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.AsignacionHabitacion>
+@using HotelBahia.BussinesLogic.Domain.Enums
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Habitacion)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Empleado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Habitacion.Numero)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado.Nombres) @Html.DisplayFor(modelItem => item.Empleado.Apellidos)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AsignacionHabitacionId">Cambiar</a> |
+                <a asp-action="Delete" asp-route-id="@item.AsignacionHabitacionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

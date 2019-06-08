@@ -7,8 +7,8 @@ namespace HotelBahia.BussinesLogic.Domain.Enums
     public enum ActividadTipo
     {
         Limpieza = 1,
-        Mantenimieto = 2,
-        Supervision = 3
+        Mantenimieto = 3,
+        Supervision = 2
     }
     public enum RolEnum
     {
