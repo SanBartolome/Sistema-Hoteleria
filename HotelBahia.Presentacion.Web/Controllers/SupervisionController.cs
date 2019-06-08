@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HotelBahia.BussinesLogic.Contracts.Repositories;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.Presentacion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelBahia.Presentacion.Web.Controllers
@@ -22,6 +23,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Supervisor")]
         [Route("[Controller]/{idHabitacion}")]
         public IActionResult Supervisar([FromRoute]int idHabitacion)
         {

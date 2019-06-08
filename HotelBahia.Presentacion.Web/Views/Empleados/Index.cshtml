@@ -1,13 +1,11 @@
 ﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.Empleado>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista de empleados";
 }
 
-<h2>Index</h2>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Añadir nuevo</a>
 </p>
 <table class="table">
     <thead>
@@ -19,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.Apellidos)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UsuarioNombre)
+                Usuario
             </th>
             <th></th>
         </tr>
@@ -37,9 +35,9 @@
                 @Html.DisplayFor(modelItem => item.UsuarioNombre)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.EmpleadoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmpleadoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmpleadoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.EmpleadoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.EmpleadoId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.EmpleadoId">Eliminar</a>
             </td>
         </tr>
 }

@@ -2,6 +2,7 @@
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Servicios;
 using HotelBahia.Presentacion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -20,6 +21,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Limpieza")]
         [Route("[Controller]/{idHabitacion}")]
         public IActionResult RealizarLimpieza(int idHabitacion)
         {
