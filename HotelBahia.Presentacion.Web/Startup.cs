@@ -54,14 +54,14 @@ namespace HotelBahia.Presentacion.Web
                 options.SlidingExpiration = true;
             });
             services.AddDbContext<LoginContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Server=tcp:shotel.database.windows.net,1433;Initial Catalog=Hoteleria;Persist Security Info=False;User ID=maverick;Password=Abcd1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")));
+                options.UseSqlServer(Configuration.GetConnectionString("HotelBahiaConexion")));
 
             services.AddScoped<IHabitacionRepository, HabitacionRepository>();
             services.AddScoped<IAsignacionesRepository, AsignacionesRepository>();
             services.AddScoped<ITareaRepository, TareaRepository>();
             services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
             services.AddDbContext<HoteleriaContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("Server=tcp:shotel.database.windows.net,1433;Initial Catalog=Hoteleria;Persist Security Info=False;User ID=maverick;Password=Abcd1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;")));
+                (options => options.UseSqlServer(Configuration.GetConnectionString("HotelBahiaConexion")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddIdentity<UserLogin, IdentityRole>()
