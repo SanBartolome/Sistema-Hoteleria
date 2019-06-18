@@ -11,7 +11,7 @@ namespace HotelBahia.BussinesLogic.Servicios.AppServices
 {
     public class NotificacionService
     {
-        string Host = "https://localhost:44314/";
+        string Host = "https://sistemahoteleria.azurewebsites.net";
         public NotificacionService()
         {
             
