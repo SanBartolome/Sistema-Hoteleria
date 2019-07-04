@@ -63,8 +63,12 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 incidencia.Estado = 0;
                 _context.Add(incidencia);
+                var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
+                habitacion.EstadoHabitacionId = 7;
+                _context.Update(habitacion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToRoute("https://sistemahoteleriabahia.azurewebsites.net");
             }
             ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", incidencia.EmpleadoId);
             return View(incidencia);
@@ -111,6 +115,18 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 try
                 {
                     _context.Update(incidencia);
+                    if(incidencia.Estado == 0)
+                    {
+                        var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
+                        habitacion.EstadoHabitacionId = 7;
+                        _context.Update(habitacion);
+                    }
+                    else if(incidencia.Estado == 1)
+                    {
+                        var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
+                        habitacion.EstadoHabitacionId = 3;
+                        _context.Update(habitacion);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

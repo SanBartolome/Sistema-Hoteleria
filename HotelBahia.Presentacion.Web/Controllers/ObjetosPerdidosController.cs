@@ -64,7 +64,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 objetoPerdido.Estado = 0;
                 _context.Add(objetoPerdido);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToRoute("https://sistemahoteleriabahia.azurewebsites.net");
             }
             ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", objetoPerdido.EmpleadoId);
             return View(objetoPerdido);

@@ -36,7 +36,14 @@
             @Html.DisplayNameFor(model => model.Estado)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Estado)
+            @if (Model.Estado == 0)
+            {
+                <p>Pendiente</p>
+            }
+            @if (Model.Estado == 1)
+            {
+                <p>Resuelto</p>
+            }
         </dd>
         <dt>
             Fecha Abierto
