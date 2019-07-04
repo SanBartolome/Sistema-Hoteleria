@@ -15,5 +15,6 @@ namespace HotelBahia.BussinesLogic.Domain.Enums
         Administrador = 1,
         Supervisor = 2,
         AgenteDeLimpieza = 3,
+        AgenteDeMantenimiento = 4
     }
 }

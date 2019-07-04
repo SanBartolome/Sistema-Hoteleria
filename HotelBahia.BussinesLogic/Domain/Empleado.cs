@@ -9,6 +9,9 @@ namespace HotelBahia.BussinesLogic.Domain
         public Empleado()
         {
             AsignacionHabitacion = new HashSet<AsignacionHabitacion>();
+            Incidencia = new HashSet<Incidencia>();
+            ObjetoPerdido = new HashSet<ObjetoPerdido>();
+            EvaluacionSupervisor = new HashSet<EvaluacionSupervisor>();
         }
 
         public int EmpleadoId { get; set; }
@@ -24,5 +27,8 @@ namespace HotelBahia.BussinesLogic.Domain
         [Required]
         public string UsuarioNombre { get; set; }
         public ICollection<AsignacionHabitacion> AsignacionHabitacion { get; set; }
+        public ICollection<Incidencia> Incidencia { get; set; }
+        public ICollection<ObjetoPerdido> ObjetoPerdido { get; set; }
+        public ICollection<EvaluacionSupervisor> EvaluacionSupervisor { get; set; }
     }
 }
