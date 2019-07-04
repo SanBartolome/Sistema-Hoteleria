@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.EvaluacionSupervisor>
+
+@{
+    ViewData["Title"] = "Lista de Evaluaciones";
+}
+
+<p>
+    <a asp-action="Create">Crear nueva</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Empleado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResultadoEvaluacion.Valoracion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResultadoEvaluacion.Evaluador)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empleado.UsuarioNombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResultadoEvaluacion.Valoracion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ResultadoEvaluacion.Evaluador)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ResultadoEvaluacionId">Ver detalles</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -269,6 +269,10 @@ namespace HotelBahia.DataAccess.Context
                 entity.Property(e => e.Comentarios)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+                entity.Property(e => e.Evaluador)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             });
 
             modelBuilder.Entity<EvaluacionSupervisor>(entity =>
