@@ -18,6 +18,7 @@ namespace HotelBahia.BussinesLogic.Domain
         public int? SupervisionesNegativas { get; set; }
         public int? Valoracion { get; set; }
         public string Comentarios { get; set; }
+        public string Evaluador { get; set; }
 
         public ICollection<EvaluacionSupervisor> EvaluacionSupervisor { get; set; }
 
