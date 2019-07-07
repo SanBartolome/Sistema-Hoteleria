@@ -15,16 +15,17 @@ namespace HotelBahia.BussinesLogic.Domain
         }
 
         public int EmpleadoId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El nombre del empleado es requerido")]
         public string Nombres { get; set; }
-        [Required]
+        [Required( ErrorMessage = "El apellido del empleado es requerido" )]
         public string Apellidos { get; set; }
         public string Direccion { get; set; }
         public int? Telefono { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El correo del empleado es requerido")]
+        [EmailAddress(ErrorMessage = "El correo ingresado es inválido")]
         public string Correo { get; set; }
         public string Sexo { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El nombre de usuario es requerido")]
         public string UsuarioNombre { get; set; }
         public ICollection<AsignacionHabitacion> AsignacionHabitacion { get; set; }
         public ICollection<Incidencia> Incidencia { get; set; }

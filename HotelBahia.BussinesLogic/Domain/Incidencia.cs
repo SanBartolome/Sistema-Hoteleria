@@ -15,8 +15,8 @@ namespace HotelBahia.BussinesLogic.Domain
         public string Descripcion { get; set; }
         public string Encargado { get; set; }
         public int? Estado { get; set; }
-        public DateTime FechaAbierto { get; set; }
-        public DateTime FechaCerrado { get; set; }
+        public DateTime? FechaAbierto { get; set; }
+        public DateTime? FechaCerrado { get; set; }
 
         public Empleado Empleado { get; set; }
 

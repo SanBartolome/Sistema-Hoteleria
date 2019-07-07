@@ -22,6 +22,7 @@
     <Folder Include="Areas\Api\Data\" />
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\" />
+    <Folder Include="Models\Request\" />
   </ItemGroup>
 
   <ItemGroup>

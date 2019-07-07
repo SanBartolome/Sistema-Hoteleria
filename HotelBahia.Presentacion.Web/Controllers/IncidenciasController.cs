@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Identity;
+using HotelBahia.Presentacion.Web.Models;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class IncidenciasController : Controller
+    public class IncidenciasController : BaseController
     {
         private readonly HoteleriaContext _context;
+        private readonly UserManager<UserLogin> _userManager;
 
-        public IncidenciasController(HoteleriaContext context)
+        public IncidenciasController(HoteleriaContext context, UserManager<UserLogin> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Incidencias
@@ -46,9 +51,17 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         // GET: Incidencias/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos");
+            if( User.IsInRole("Supervisor"))
+            {
+                var habitacion = _context.Habitacion.FirstOrDefault(h => h.Numero == int.Parse(habitacionNum) );
+                if( habitacion == null )
+                {
+                    return View();
+                }
+                return View( new Incidencia() { Habitacion = habitacion.Numero } );
+            }
             return View();
         }
 
@@ -61,14 +74,24 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var empleado = await _context.Empleado.FirstOrDefaultAsync(e => e.UsuarioNombre == _userManager.GetUserName(User));
+                incidencia.EmpleadoId = empleado.EmpleadoId;
+                incidencia.FechaAbierto = DateTime.Now;
                 incidencia.Estado = 0;
                 _context.Add(incidencia);
                 var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
                 habitacion.EstadoHabitacionId = 7;
                 _context.Update(habitacion);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return RedirectToRoute("https://sistemahoteleriabahia.azurewebsites.net");
+                alert("success", "Incidencia creada con éxito", "Operación exitosa");
+                if ( User.IsInRole("Supervisor") )
+                {
+                    return RedirectToAction("index","supervision");
+                }
+                if ( User.IsInRole("Administrador"))
+                {
+                    return RedirectToAction("index");
+                }
             }
             ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", incidencia.EmpleadoId);
             return View(incidencia);

@@ -26,7 +26,8 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-center ">
-                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary ">Limpieza Realizada</button>
+                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary"
+                    :disabled="bloqueadoPorCambioOtroUsuario">Limpieza Realizada</button>
                     <div>
                         <a asp-controller="ObjetosPerdidos" asp-action="Create">Registrar objeto perdido</a>
                     </div>
@@ -51,7 +52,8 @@
                     5: "red",
                     6: "yellow",
                     7: "gray"
-                }
+                },
+                bloqueadoPorCambioOtroUsuario: false
             },
             created: function () {
                 
@@ -61,7 +63,17 @@
                     this.$http.get("/api/Habitacion/CheckLimpiezaRealizada/" + this.habitacionId)
                         .then(function (response) {
                             this.estadoHabitacionId = response.body.estadoHabitacionId;
+                            toast.success('Checkout realizado', 'Operación exitosa');
                         })
+                        .catch(function (err) {
+                            console.log(err);
+                            const error = err.body;
+                            const errorMessage = error.messages[0];
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_CLEAN") {
+                                this.bloqueadoPorCambioOtroUsuario = true;
+                            }
+                            toast.error(errorMessage, 'Error en la operación');
+                        });
                 }
             }
         });

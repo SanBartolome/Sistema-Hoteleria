@@ -3,6 +3,7 @@ using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Servicios.AppServices;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -137,13 +138,18 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             {
                 return NotFound();
             }
+            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+            if ( asigEmpleado == null )
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.MISSING_CLEANER" } });
+            }
             if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Ocupado)
-                return BadRequest("El estado actual debe ser Ocupado");
-
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECKOUT" } });
+            }
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
-            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
             new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
             return Ok(habitacion);
 
@@ -161,14 +167,19 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             {
                 return NotFound();
             }
+            var asignSupervisor = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.Supervisor);
+            if (asignSupervisor == null)
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.MISSING_SUPERVISOR" } });
+            }
             if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Desocupado && habitacion.EstadoHabitacionId != (int)HabitacionEstado.LimpiezaIncompleta)
-                return BadRequest("No se puede realizar limpieza en esta habitacion");
-
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECK_CLEAN" } });
+            }
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaRealizada;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
-            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.Supervisor);
-            new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Supervision);
+            new NotificacionService().Notificar(asignSupervisor.Empleado, habitacion, ActividadTipo.Supervision);
             return Ok(habitacion);
         }
 
