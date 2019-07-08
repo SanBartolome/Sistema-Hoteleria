@@ -11,14 +11,10 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IncidenciaID" />
-            <div class="form-group">
-                <label asp-for="EmpleadoId" class="control-label"></label>
-                <select asp-for="EmpleadoId" class="form-control" asp-items="ViewBag.EmpleadoId"></select>
-                <span asp-validation-for="EmpleadoId" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="EmpleadoId" />
             <div class="form-group">
                 <label asp-for="Habitacion" class="control-label"></label>
-                <input asp-for="Habitacion" class="form-control" />
+                <input asp-for="Habitacion" class="form-control" readonly />
                 <span asp-validation-for="Habitacion" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,8 +29,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Encargado" class="control-label"></label>
-                <input asp-for="Encargado" class="form-control" />
-                <span asp-validation-for="Encargado" class="text-danger"></span>
+                <select asp-for="Encargado" class="form-control" asp-items="ViewBag.Encargado"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>

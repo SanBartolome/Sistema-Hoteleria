@@ -1,7 +1,7 @@
 ﻿
-@model RealizarLimpiezaViewModel;
+@model RealizarMantenimientoViewModel;
 @{
-    ViewData["Title"] = "Realizar Limpieza";
+    ViewData["Title"] = "Realizar Mantenimiento";
 }
 <div class="container-fluid">
     <div id="appLimpieza" class="row">
@@ -12,27 +12,23 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <h4>Actividades a Realizar:</h4>
+                        <h4>Incidencia:</h4>
                     </div>
                     <div>
                         <ul class="list-group list-group-unbordered">
-                            @foreach (var item in Model.Habitacion.HabitacionActividad)
-                            {
-                                <li class="list-group-item no-border">
-                                    <i class="fa fa-circle text-info text-sm mr-1"></i>@item.Actividad.Descripcion
-                                </li>
-                            }
+                            <li class="list-group-item no-border">
+                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.Prioridad
+                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.Descripcion
+                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.FechaAbierto
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-center ">
-                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary"
+                    <button type="button" v-on:click="checkRealizarManteniento()" class="btn btn-primary"
                             :disabled="bloqueadoPorCambioOtroUsuario">
-                        Limpieza Realizada
+                        Mantenimento Realizado
                     </button>
-                </div>
-                <div>
-                    <a asp-controller="ObjetosPerdidos" asp-action="Create">Registrar objeto perdido</a>
                 </div>
             </div>
         </div>
@@ -41,8 +37,8 @@
 </div>
 @section Scripts{
     <script>
-        var limpiezaViewModel = new Vue({
-            el: "#appLimpieza",
+        var mantenimientoViewModel = new Vue({
+            el: "#appMantenimiento",
             data: {
                 estadoHabitacionId: @Model.Habitacion.EstadoHabitacionId,
                 habitacionId: @Model.Habitacion.HabitacionId,
@@ -58,20 +54,20 @@
                 bloqueadoPorCambioOtroUsuario: false
             },
             created: function () {
-                
+
             },
             methods: {
                 checkRealizarLimpieza: function () {
-                    this.$http.get("/api/Habitacion/CheckLimpiezaRealizada/" + this.habitacionId)
+                    this.$http.get("/api/Habitacion/CheckMantenimientoRealizado/" + this.habitacionId)
                         .then(function (response) {
                             this.estadoHabitacionId = response.body.estadoHabitacionId;
-                            toast.success('Limpieza realizada', 'Operación exitosa');
+                            toast.success('Mantenimiento realizado', 'Operación exitosa');
                         })
                         .catch(function (err) {
                             console.log(err);
                             const error = err.body;
                             const errorMessage = error.messages[0];
-                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_CLEAN") {
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_UPKEEP") {
                                 this.bloqueadoPorCambioOtroUsuario = true;
                             }
                             toast.error(errorMessage, 'Error en la operación');

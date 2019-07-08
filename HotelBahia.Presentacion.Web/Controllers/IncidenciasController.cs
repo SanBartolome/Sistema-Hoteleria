@@ -10,6 +10,8 @@ using HotelBahia.DataAccess.Context;
 using HotelBahia.Presentacion.Web.Controllers.Base;
 using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
+using HotelBahia.BussinesLogic.Servicios.AppServices;
+using HotelBahia.BussinesLogic.Domain.Enums;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -53,15 +55,16 @@ namespace HotelBahia.Presentacion.Web.Controllers
         // GET: Incidencias/Create
         public async Task<IActionResult> Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
-            if( User.IsInRole("Supervisor"))
+            if (User.IsInRole("Supervisor"))
             {
-                var habitacion = _context.Habitacion.FirstOrDefault(h => h.Numero == int.Parse(habitacionNum) );
-                if( habitacion == null )
+                var habitacion = _context.Habitacion.FirstOrDefault(h => h.Numero == int.Parse(habitacionNum));
+                if (habitacion == null)
                 {
                     return View();
                 }
-                return View( new Incidencia() { Habitacion = habitacion.Numero } );
+                return View(new Incidencia() { Habitacion = habitacion.Numero });
             }
+            ViewData["Habitaciones"] = new SelectList(_context.Habitacion.Where(h => h.EstadoHabitacionId != 7), "Numero", "Numero");
             return View();
         }
 
@@ -93,7 +96,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     return RedirectToAction("index");
                 }
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", incidencia.EmpleadoId);
+            ViewData["Habitaciones"] = new SelectList(_context.Habitacion, "Numero", "Numero");
             return View(incidencia);
         }
 
@@ -110,7 +113,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", incidencia.EmpleadoId);
             var estados = new SelectList(
                 new List<SelectListItem>
                 {
@@ -118,6 +120,15 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     new SelectListItem {Text = "0", Value = "Pendiente"}
                 }, "Value", "Text");
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
+            var encargados = new SelectList(
+                 new List<SelectListItem>
+                 {
+                    new SelectListItem {Text = _context.Empleado.Find(21).UsuarioNombre, Value = _context.Empleado.Find(21).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(22).UsuarioNombre, Value = _context.Empleado.Find(22).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(23).UsuarioNombre, Value = _context.Empleado.Find(23).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(24).UsuarioNombre, Value = _context.Empleado.Find(24).UsuarioNombre }
+                 }, "Value", "Text");
+            ViewData["Encargado"] = encargados;
             return View(incidencia);
         }
 
@@ -137,20 +148,55 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 try
                 {
-                    _context.Update(incidencia);
-                    if(incidencia.Estado == 0)
+                    HoteleriaContext _context2 = new HoteleriaContext();
+                    HoteleriaContext _context3 = new HoteleriaContext();
+                    Incidencia inc = _context2.Incidencia.Find(incidencia.IncidenciaID);
+                    
+                    if (incidencia.Encargado != null && incidencia.Estado == 0)
                     {
-                        var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
-                        habitacion.EstadoHabitacionId = 7;
-                        _context.Update(habitacion);
+                        Empleado emp = _context2.Empleado.Where(e => e.UsuarioNombre == incidencia.Encargado).First();
+                        Habitacion hab = _context2.Habitacion.Where(h => h.Numero == incidencia.Habitacion).First();
+                        AsignacionHabitacion asignacionHabitacion = new AsignacionHabitacion
+                        {
+                            EmpleadoId = emp.EmpleadoId,
+                            HabitacionId = hab.HabitacionId,
+                            RolId = 4
+                        };
+                        if (inc.Encargado == null)
+                        {
+                            _context2.Add(asignacionHabitacion);
+                        }
+                        else
+                        {
+                            _context2.Update(asignacionHabitacion);
+                        }
+                        new NotificacionService().Notificar(emp, hab, ActividadTipo.Mantenimiento);
+                    }
+                    if (incidencia.Estado == 0)
+                    {
+                        var habitacion = _context3.Habitacion.Where(a => a.Numero == incidencia.Habitacion).First();
+                        if (habitacion.EstadoHabitacionId != 7)
+                        {
+                            habitacion.EstadoHabitacionId = 7;
+                            _context3.Update(habitacion);
+                        }
                     }
                     else if(incidencia.Estado == 1)
                     {
-                        var habitacion = _context.Habitacion.Where(a => a.Numero == incidencia.Habitacion).FirstOrDefault();
+                        var habitacion = _context3.Habitacion.Where(a => a.Numero == incidencia.Habitacion).First();
+                        var limpiezaid = _context3.AsignacionHabitacion.Where(a => a.HabitacionId == habitacion.HabitacionId && a.RolId == 3).First().EmpleadoId;
+                        var emplimp = _context3.Empleado.Find(limpiezaid);
                         habitacion.EstadoHabitacionId = 3;
-                        _context.Update(habitacion);
+                        _context3.Update(habitacion);
+                        new NotificacionService().Notificar(emplimp, habitacion, ActividadTipo.Limpieza);
+                        var emp = _context2.Empleado.Where(e => e.UsuarioNombre == incidencia.Encargado).First();
+                        var asignacionHabitacion = _context2.AsignacionHabitacion.Where(a => a.EmpleadoId == emp.EmpleadoId && a.HabitacionId == habitacion.HabitacionId).First();
+                        _context2.Remove(asignacionHabitacion);
                     }
+                    _context.Update(incidencia);
                     await _context.SaveChangesAsync();
+                    await _context2.SaveChangesAsync();
+                    await _context3.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -165,7 +211,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", incidencia.EmpleadoId);
             var estados = new SelectList(
                 new List<SelectListItem>
                 {
@@ -173,6 +218,15 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     new SelectListItem {Text = "0", Value = "Pendiente"}
                 }, "Value", "Text");
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
+            var encargados = new SelectList(
+                 new List<SelectListItem>
+                 {
+                    new SelectListItem {Text = _context.Empleado.Find(21).UsuarioNombre, Value = _context.Empleado.Find(21).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(22).UsuarioNombre, Value = _context.Empleado.Find(22).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(23).UsuarioNombre, Value = _context.Empleado.Find(23).UsuarioNombre },
+                    new SelectListItem {Text = _context.Empleado.Find(24).UsuarioNombre, Value = _context.Empleado.Find(24).UsuarioNombre }
+                 }, "Value", "Text");
+            ViewData["Encargado"] = encargados;
             return View(incidencia);
         }
 

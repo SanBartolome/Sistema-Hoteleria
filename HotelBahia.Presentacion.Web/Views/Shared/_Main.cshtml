@@ -162,6 +162,19 @@
                                     </a>
                                 </li>
                             }
+                            if (User.IsInRole("Mantenimiento"))
+                            {
+                                <li class="nav-item">
+
+                                    <a asp-controller="Mantenimiento" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon fa fa-th"></i>
+                                        <p>
+                                            Mantenimiento
+                                            <!--<span class="right badge badge-danger">New</span>-->
+                                        </p>
+                                    </a>
+                                </li>
+                            }
                         }
                     </ul>
                 </nav>

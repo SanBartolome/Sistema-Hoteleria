@@ -195,13 +195,19 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             {
                 return NotFound();
             }
+            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+            if (asigEmpleado == null)
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.MISSING_CLEANER" } });
+            }
             if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.LimpiezaRealizada)
-                return BadRequest("No se puede realizar limpieza en esta habitacion");
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECK_SUPERVISE" } });
+            }
 
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.LimpiezaIncompleta;
             _habitacionRepository.Edit(habitacion);
             _habitacionRepository.SaveChanges();
-            var asigEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
             new NotificacionService().Notificar(asigEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
             return Ok(habitacion);
         }
@@ -219,7 +225,9 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
                 return NotFound();
             }
             if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.LimpiezaRealizada)
-                return BadRequest("No se puede habilitar esta habitacion");
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECK_SUPERVISE" } });
+            }
 
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.Disponible;
             _habitacionRepository.Edit(habitacion);
@@ -240,7 +248,9 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
                 return NotFound();
             }
             if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Disponible)
-                return BadRequest("No se puede Ocupar esta habitacion");
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECKIN" } });
+            }
 
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.Ocupado;
             _habitacionRepository.Edit(habitacion);
@@ -248,6 +258,33 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             return Ok(habitacion);
         }
 
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult> CheckMantenimientoRealizado([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var habitacion = await _context.Habitacion.FindAsync(id);
+            if (habitacion == null)
+            {
+                return NotFound();
+            }
+            var asignEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
+            if (asignEmpleado == null)
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.MISSING_CLEANER" } });
+            }
+            if (habitacion.EstadoHabitacionId != (int)HabitacionEstado.Bloqueado)
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.ERROR_ON_CHECK_UPKEEP" } });
+            }
+            habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
+            _habitacionRepository.Edit(habitacion);
+            _habitacionRepository.SaveChanges();
+            new NotificacionService().Notificar(asignEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
+            return Ok(habitacion);
+        }
 
         private bool HabitacionExists(int id)
         {

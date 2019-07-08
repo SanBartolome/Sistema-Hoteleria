@@ -18,7 +18,7 @@
                         <ul>
                             <li v-for="item in listActividad">
                                 {{item.actividad.descripcion}}
-                                <select  v-model="item.estado">
+                                <select v-model="item.estado">
                                     <option v-for="option in options" v-bind:value="option.value">
                                         {{ option.text }}
                                     </option>
@@ -27,11 +27,18 @@
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-primary" v-on:click="CheckLimpiezaIncompleta()">Limpieza Incompleta</button>
-                        <button class="btn btn-primary" v-on:click="HabilitarHabitacion()">Habilitar Habitacion</button>
-                        <div>
-                            <a asp-controller="Incidencias" asp-action="Create" asp-route-habitacion="@Model.Numero">Registrar incidencia</a>
-                        </div>
+                        <button type="button" v-on:click="checkRealizarIncompleta()" class="btn btn-primary"
+                                :disabled="bloqueadoPorCambioOtroUsuario">
+                            Limpieza Incompleta
+                        </button>
+                        <button type="button" v-on:click="HabilitarHabitacion()" class="btn btn-primary"
+                                :disabled="bloqueadoPorCambioOtroUsuario">
+                            Habilitar Habitacion
+                        </button>
+
+                    </div>
+                    <div>
+                        <a asp-controller="Incidencias" asp-action="Create" asp-route-habitacion="@Model.Numero">Registrar incidencia</a>
                     </div>
                 </div>
             </div>
@@ -60,7 +67,8 @@
                     5: "red",
                     6: "yellow",
                     7: "gray"
-                }
+                },
+                bloqueadoPorCambioOtroUsuario: false
             },
             created: function () {
                 this.getItemsActividades();
@@ -84,18 +92,38 @@
                 CheckLimpiezaIncompleta: function () {
                     this.checkSupervisar();
                     this.$http.get("/api/Habitacion/CheckLimpiezaIncompleta/" + this.idHabitacion)
-                    .then(function (response) {
-                        console.log(response);
-                        //this.estadoHabitacionId = response.body.estadoHabitacionId;
-                    })
+                        .then(function (response) {
+                            console.log(response);
+                            toast.success('Habitación devuelta a limpieza', 'Operación exitosa');
+                            //this.estadoHabitacionId = response.body.estadoHabitacionId;
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                            const error = err.body;
+                            const errorMessage = error.messages[0];
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_SUPERVISE") {
+                                this.bloqueadoPorCambioOtroUsuario = true;
+                            }
+                            toast.error(errorMessage, 'Error en la operación');
+                        });
                 },
                 HabilitarHabitacion: function () {
                 this.checkSupervisar();
-                this.$http.get("/api/Habitacion/HabilitarHabitacion/" + this.idHabitacion)
-                    .then(function (response) {
-                        console.log(response);
-                        //this.estadoHabitacionId = response.body.estadoHabitacionId;
-                    })
+                    this.$http.get("/api/Habitacion/HabilitarHabitacion/" + this.idHabitacion)
+                        .then(function (response) {
+                            console.log(response);
+                            toast.success('Habitación habilitada', 'Operación exitosa');
+                            //this.estadoHabitacionId = response.body.estadoHabitacionId;
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                            const error = err.body;
+                            const errorMessage = error.messages[0];
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_SUPERVISE") {
+                                this.bloqueadoPorCambioOtroUsuario = true;
+                            }
+                            toast.error(errorMessage, 'Error en la operación');
+                        });
                 }
 
             }

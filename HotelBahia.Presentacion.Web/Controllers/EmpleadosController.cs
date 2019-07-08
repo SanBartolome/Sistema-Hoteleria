@@ -51,7 +51,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
         // GET: Empleados/Create
         public IActionResult Create()
         {
-            ViewData["Rol"] = new SelectList(_roleManager.Roles, "Id", "Name");
+            //var allRoles = _roleManager.Roles.ToList().Select(rr => new SelectListItem { Value = rr.Id, Text = rr.Name }).ToList();
+            //ViewData["Roles"] = allRoles;
             return View();
         }
 

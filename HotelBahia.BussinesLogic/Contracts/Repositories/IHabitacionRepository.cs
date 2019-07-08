@@ -12,5 +12,6 @@ namespace HotelBahia.BussinesLogic.Contracts.Repositories
         IEnumerable<Actividad> ObtenerActividades(int idHabitacion, int tipoActividadId);
         IEnumerable<Actividad> ObtenerActividadesPorEmpleado(int idHabitacion, int idEmpleado);
         Habitacion ObtenerConActividades(int idHabitacion, int tipoActividadId);
+        Habitacion ObtenerConIncidencias(int idHabitacion);
     }
 }
