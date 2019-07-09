@@ -24,6 +24,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
+            _habitacionRepository = habitacionRepository;
         }
         public IActionResult ListHabitacion()
         {
@@ -45,7 +46,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             }
             var habitacion = _habitacionRepository.ObtenerConIncidencias(idHabitacion);
             var incidencia = _context.Incidencia.Where(i => i.Habitacion == habitacion.Numero).First();
-            if (habitacion != null)
+            if (habitacion != null && incidencia != null)
             {
                 model.Habitacion = habitacion;
                 model.Incidencia = incidencia;

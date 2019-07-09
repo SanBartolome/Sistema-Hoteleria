@@ -3,9 +3,12 @@ using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Servicios.AppServices;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Models;
 using HotelBahia.Presentacion.Web.Models.Response;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,14 +22,16 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
         private readonly HoteleriaContext _context;
         private readonly IHabitacionRepository _habitacionRepository;
         private readonly IAsignacionesRepository _asignacionesRepository;
+        private readonly UserManager<UserLogin> _userManager;
 
         public HabitacionController(IHabitacionRepository habitacionRepository,
             IAsignacionesRepository asignacionesRepository,
-            HoteleriaContext context)
+            HoteleriaContext context, UserManager<UserLogin> userManager)
         {
             _context = context;
             _habitacionRepository = habitacionRepository;
             _asignacionesRepository = asignacionesRepository;
+            _userManager = userManager;
         }
 
         // GET: api/Habitacion
@@ -265,10 +270,16 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
+            HoteleriaContext _context2 = new HoteleriaContext();
             var habitacion = await _context.Habitacion.FindAsync(id);
+            var incidencia = _context.Incidencia.Where(i => i.Habitacion == habitacion.Numero).Last();
             if (habitacion == null)
             {
                 return NotFound();
+            }
+            if(incidencia == null)
+            {
+                return BadRequest(new ErrorResponse() { messages = new string[] { "HABITACION.MISSING_ISSUE" } });
             }
             var asignEmpleado = _asignacionesRepository.EmpleadoAsignadoPorRol(habitacion.HabitacionId, (int)RolEnum.AgenteDeLimpieza);
             if (asignEmpleado == null)
@@ -281,7 +292,15 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             }
             habitacion.EstadoHabitacionId = (int)HabitacionEstado.Desocupado;
             _habitacionRepository.Edit(habitacion);
+            incidencia.Estado = 1;
+            incidencia.FechaCerrado = DateTime.Now;
+            _context.Update(incidencia);
+            var empleadoid = _context2.Empleado.Where(e => e.UsuarioNombre == _userManager.GetUserName(User)).First().EmpleadoId;
+            var asignacion = _context2.AsignacionHabitacion.Where(a => a.EmpleadoId == empleadoid && a.HabitacionId == habitacion.HabitacionId).First();
+            _context2.Remove(asignacion);
             _habitacionRepository.SaveChanges();
+            _context.SaveChanges();
+            _context2.SaveChanges();
             new NotificacionService().Notificar(asignEmpleado.Empleado, habitacion, ActividadTipo.Limpieza);
             return Ok(habitacion);
         }

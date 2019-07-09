@@ -174,6 +174,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     }
                     if (incidencia.Estado == 0)
                     {
+                        incidencia.FechaCerrado = null;
                         var habitacion = _context3.Habitacion.Where(a => a.Numero == incidencia.Habitacion).First();
                         if (habitacion.EstadoHabitacionId != 7)
                         {
@@ -183,6 +184,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     }
                     else if(incidencia.Estado == 1)
                     {
+                        incidencia.FechaCerrado = DateTime.Now;
                         var habitacion = _context3.Habitacion.Where(a => a.Numero == incidencia.Habitacion).First();
                         var limpiezaid = _context3.AsignacionHabitacion.Where(a => a.HabitacionId == habitacion.HabitacionId && a.RolId == 3).First().EmpleadoId;
                         var emplimp = _context3.Empleado.Find(limpiezaid);

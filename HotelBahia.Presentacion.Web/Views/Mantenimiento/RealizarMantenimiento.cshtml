@@ -4,7 +4,7 @@
     ViewData["Title"] = "Realizar Mantenimiento";
 }
 <div class="container-fluid">
-    <div id="appLimpieza" class="row">
+    <div id="appMantenimiento" class="row">
         <div class="col-md-4">
             <div class="card card-outline" v-bind:class="'card-' + colorState[estadoHabitacionId]">
                 <div class="card-header ">
@@ -17,15 +17,21 @@
                     <div>
                         <ul class="list-group list-group-unbordered">
                             <li class="list-group-item no-border">
-                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.Prioridad
-                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.Descripcion
-                                <i class="fa fa-circle text-info text-sm mr-1"></i>@Model.Incidencia.FechaAbierto
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Prioridad: @Model.Incidencia.Prioridad
+                                </div>
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Descripcion: @Model.Incidencia.Descripcion
+                                </div>
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Fecha Abierto: @Model.Incidencia.FechaAbierto
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-center ">
-                    <button type="button" v-on:click="checkRealizarManteniento()" class="btn btn-primary"
+                    <button type="button" v-on:click="checkRealizarMantenimiento()" class="btn btn-primary"
                             :disabled="bloqueadoPorCambioOtroUsuario">
                         Mantenimento Realizado
                     </button>
@@ -57,7 +63,7 @@
 
             },
             methods: {
-                checkRealizarLimpieza: function () {
+                checkRealizarMantenimiento: function () {
                     this.$http.get("/api/Habitacion/CheckMantenimientoRealizado/" + this.habitacionId)
                         .then(function (response) {
                             this.estadoHabitacionId = response.body.estadoHabitacionId;
