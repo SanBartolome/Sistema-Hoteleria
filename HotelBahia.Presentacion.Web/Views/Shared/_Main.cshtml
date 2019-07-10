@@ -217,6 +217,7 @@
     <script src="~/js/nprogress.js"></script>
     <script>
         Vue.http.interceptors.push((request, next) => {
+            console.log("Holi");
             NProgress.start();
             next((response) => {
                 NProgress.done();
