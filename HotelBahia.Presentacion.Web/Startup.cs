@@ -50,7 +50,7 @@ namespace HotelBahia.Presentacion.Web
                 options.LoginPath = "/Account/Login";
                 // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/AccessDenied.
-                options.AccessDeniedPath = "/Account/Login";
+                options.AccessDeniedPath = "/";
                 options.SlidingExpiration = true;
             });
             services.AddDbContext<LoginContext>(options =>
