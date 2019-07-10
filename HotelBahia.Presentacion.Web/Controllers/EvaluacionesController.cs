@@ -7,48 +7,73 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Identity;
+using HotelBahia.Presentacion.Web.Models;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class EvaluacionesController : Controller
+    public class EvaluacionesController : BaseController
     {
         private readonly HoteleriaContext _context;
+        private readonly UserManager<UserLogin> _userManager;
 
-        public EvaluacionesController(HoteleriaContext context)
+        public EvaluacionesController(HoteleriaContext context, UserManager<UserLogin> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Evaluaciones
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.EvaluacionSupervisor.ToListAsync());
+            List<EvaluacionModel> models = new List<EvaluacionModel>();
+            var cantidad = _context.EvaluacionSupervisor.Include(es => es.ResultadoEvaluacion).Include(es => es.Empleado).ToList().Count;
+            for (int i=1; i<=cantidad; i++)
+            {
+                EvaluacionModel model = new EvaluacionModel();
+                model.EvaluacionSupervisor = _context.EvaluacionSupervisor.Find(i);
+                var empleado = _context.Empleado.Where(e => e.EmpleadoId == model.EvaluacionSupervisor.EmpleadoId).FirstOrDefault();
+                model.Empleado = empleado;
+                var resultadoEvaluacion = _context.ResultadoEvaluacion.Where(e => e.ResultadoEvaluacionId == model.EvaluacionSupervisor.ResultadoEvaluacionId).FirstOrDefault();
+                model.ResultadoEvaluacion = resultadoEvaluacion;
+                models.Add(model);
+            }
+            return View(models);
         }
 
         // GET: Evaluaciones/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
+            EvaluacionModel model = new EvaluacionModel();
             if (id == null)
             {
                 return NotFound();
             }
 
-            var evaluacionSupervisor = await _context.EvaluacionSupervisor
-                .Include(a => a.Empleado)
-                .Include(a => a.ResultadoEvaluacion)
-                .FirstOrDefaultAsync(m => m.ResultadoEvaluacionId == id);
-            if (evaluacionSupervisor == null)
+            var evaluacionSupervisor = _context.EvaluacionSupervisor.Where(m => m.EvaluacionSupervisorId == id).FirstOrDefault();
+            var resultadoEvaluacion = _context.ResultadoEvaluacion
+                .Where(m => m.ResultadoEvaluacionId == evaluacionSupervisor.ResultadoEvaluacionId).FirstOrDefault();
+            var empleado = _context.Empleado
+                .Where(m => m.EmpleadoId == evaluacionSupervisor.EmpleadoId).FirstOrDefault();
+            if (resultadoEvaluacion == null)
             {
                 return NotFound();
             }
-
-            return View(evaluacionSupervisor);
+            if (empleado == null)
+            {
+                return NotFound();
+            }
+            model.ResultadoEvaluacion = resultadoEvaluacion;
+            model.Empleado = empleado;
+            return View(model);
         }
 
         // GET: Evaluaciones/Create
         public IActionResult Create()
         {
-            ViewData["Empleado"] = new SelectList(_context.Empleado, "EmpleadoId", "UsuarioNombre");
+            var supervisores = _userManager.GetUsersInRoleAsync("Supervisor").Result;
+            ViewData["Supervisores"] = new SelectList(supervisores);
             return View();
         }
 
@@ -57,18 +82,28 @@ namespace HotelBahia.Presentacion.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ResultadoEvaluacionId,Tardanzas,Faltas,SupervisionesNegativas,Valoracion,Comentarios,Evaluador")] ResultadoEvaluacion resultadoEvaluacion, int empleado)
+        public async Task<IActionResult> Create(EvaluacionModel evaluacionModel)
         {
-            if (ModelState.IsValid)
-            {
+            /*if (ModelState.IsValid)
+            {*/
+                HoteleriaContext _context2 = new HoteleriaContext();
+                ResultadoEvaluacion resultadoEvaluacion = new ResultadoEvaluacion();
+                Empleado empleado = new Empleado();
+                var emp = await _context.Empleado.FirstOrDefaultAsync(e => e.UsuarioNombre == _userManager.GetUserName(User));
+                resultadoEvaluacion = evaluacionModel.ResultadoEvaluacion;
+                resultadoEvaluacion.Evaluador = emp.UsuarioNombre;
                 _context.Add(resultadoEvaluacion);
-                var evaluacionSupervisor = new EvaluacionSupervisor { EmpleadoId = empleado, ResultadoEvaluacionId = resultadoEvaluacion.ResultadoEvaluacionId };
-                _context.Add(evaluacionSupervisor);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["Empleado"] = new SelectList(_context.Empleado, "EmpleadoId", "UsuarioNombre");
-            return View(resultadoEvaluacion);
+                var supervisorid = _context2.Empleado.Where(e => e.UsuarioNombre == evaluacionModel.Empleado.UsuarioNombre).First().EmpleadoId;
+                var evaluacionSupervisor = new EvaluacionSupervisor { EmpleadoId = supervisorid, ResultadoEvaluacionId = resultadoEvaluacion.ResultadoEvaluacionId };
+                _context2.Add(evaluacionSupervisor);
+                await _context2.SaveChangesAsync();
+            alert("success", "Evaluacion registrada con exito", "Operacion exitosa");
+            return RedirectToAction(nameof(Index));
+            /*}
+            var supervisores = _userManager.GetUsersInRoleAsync("Supervisor").Result;
+            ViewData["Supervisores"] = new SelectList(supervisores);
+            return View(evaluacionModel);*/
         }
 
     }

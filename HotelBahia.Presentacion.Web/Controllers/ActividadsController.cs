@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Controllers.Base;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class ActividadsController : Controller
+    public class ActividadsController : BaseController
     {
         private readonly HoteleriaContext _context;
 
@@ -51,7 +52,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {*/
                 _context.Add(actividad);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            alert("success", "Actividad creada con exito", "Operacion exitosa");
+            return RedirectToAction(nameof(Index));
             /*}
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre", actividad.TipoActividadId);
             var estados = new SelectList(
@@ -118,7 +120,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+            alert("success", "Actividad editada con exito", "Operacion exitosa");
+            return RedirectToAction(nameof(Index));
             /*}
             ViewData["TipoActividad"] = new SelectList(_context.TipoActividad, "TipoActividadId", "Nombre", actividad.TipoActividadId);
             var estados = new SelectList(
@@ -163,6 +166,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             var actividad = await _context.Actividad.FindAsync(id);
             _context.Actividad.Remove(actividad);
             await _context.SaveChangesAsync();
+            alert("success", "Actividad eliminada con exito", "Operacion exitosa");
             return RedirectToAction(nameof(Index));
         }
 

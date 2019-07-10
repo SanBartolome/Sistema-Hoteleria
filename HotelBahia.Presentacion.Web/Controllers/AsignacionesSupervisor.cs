@@ -10,11 +10,12 @@ using HotelBahia.DataAccess.Context;
 using System.Data.SqlClient;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Dto;
+using HotelBahia.Presentacion.Web.Controllers.Base;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
     
-    public class AsignacionesSupervisorController : Controller
+    public class AsignacionesSupervisorController : BaseController
     {
         private readonly HoteleriaContext _context;
 
@@ -81,6 +82,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 asignacionHabitacion.RolId = (int)RolEnum.Supervisor;
                 _context.Add(asignacionHabitacion);
                 await _context.SaveChangesAsync();
+                alert("success", "Asignacion registrada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             SqlParameter[] parametros = new SqlParameter[]
@@ -151,6 +153,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Asignacion editada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             SqlParameter[] parametros = new SqlParameter[]
@@ -193,6 +196,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             var asignacionHabitacion = await _context.AsignacionHabitacion.FindAsync(id);
             _context.AsignacionHabitacion.Remove(asignacionHabitacion);
             await _context.SaveChangesAsync();
+            alert("success", "Asignacion eliminada con exito", "Operacion exitosa");
             return RedirectToAction(nameof(Index));
         }
 

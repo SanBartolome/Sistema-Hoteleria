@@ -53,7 +53,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         // GET: Incidencias/Create
-        public async Task<IActionResult> Create([FromQuery(Name = "habitacion")] string habitacionNum)
+        public IActionResult Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
             if (User.IsInRole("Supervisor"))
             {
@@ -96,7 +96,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     return RedirectToAction("index");
                 }
             }
-            ViewData["Habitaciones"] = new SelectList(_context.Habitacion, "Numero", "Numero");
+            ViewData["Habitaciones"] = new SelectList(_context.Habitacion.Where(h => h.EstadoHabitacionId != 7), "Numero", "Numero");
             return View(incidencia);
         }
 
@@ -120,15 +120,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     new SelectListItem {Text = "0", Value = "Pendiente"}
                 }, "Value", "Text");
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
-            var encargados = new SelectList(
-                 new List<SelectListItem>
-                 {
-                    new SelectListItem {Text = _context.Empleado.Find(21).UsuarioNombre, Value = _context.Empleado.Find(21).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(22).UsuarioNombre, Value = _context.Empleado.Find(22).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(23).UsuarioNombre, Value = _context.Empleado.Find(23).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(24).UsuarioNombre, Value = _context.Empleado.Find(24).UsuarioNombre }
-                 }, "Value", "Text");
-            ViewData["Encargado"] = encargados;
+            var encargados = _userManager.GetUsersInRoleAsync("Mantenimiento").Result;
+            ViewData["Encargado"] = new SelectList(encargados);
             return View(incidencia);
         }
 
@@ -211,6 +204,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Incidencia editada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             var estados = new SelectList(
@@ -220,15 +214,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     new SelectListItem {Text = "0", Value = "Pendiente"}
                 }, "Value", "Text");
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
-            var encargados = new SelectList(
-                 new List<SelectListItem>
-                 {
-                    new SelectListItem {Text = _context.Empleado.Find(21).UsuarioNombre, Value = _context.Empleado.Find(21).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(22).UsuarioNombre, Value = _context.Empleado.Find(22).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(23).UsuarioNombre, Value = _context.Empleado.Find(23).UsuarioNombre },
-                    new SelectListItem {Text = _context.Empleado.Find(24).UsuarioNombre, Value = _context.Empleado.Find(24).UsuarioNombre }
-                 }, "Value", "Text");
-            ViewData["Encargado"] = encargados;
+            var encargados = _userManager.GetUsersInRoleAsync("Mantenimiento").Result;
+            ViewData["Encargado"] = new SelectList(encargados);
             return View(incidencia);
         }
 

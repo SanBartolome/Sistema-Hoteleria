@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Identity;
+using HotelBahia.Presentacion.Web.Models;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class ObjetosPerdidosController : Controller
+    public class ObjetosPerdidosController : BaseController
     {
         private readonly HoteleriaContext _context;
+        private readonly UserManager<UserLogin> _userManager;
 
-        public ObjetosPerdidosController(HoteleriaContext context)
+        public ObjetosPerdidosController(HoteleriaContext context, UserManager<UserLogin> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: ObjetosPerdidos
@@ -46,9 +51,18 @@ namespace HotelBahia.Presentacion.Web.Controllers
         }
 
         // GET: ObjetosPerdidos/Create
-        public IActionResult Create()
+        public IActionResult Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos");
+            if (User.IsInRole("Limpieza"))
+            {
+                var habitacion = _context.Habitacion.FirstOrDefault(h => h.Numero == int.Parse(habitacionNum));
+                if (habitacion == null)
+                {
+                    return View();
+                }
+                return View(new ObjetoPerdido() { Habitacion = habitacion.Numero });
+            }
+            ViewData["Habitaciones"] = new SelectList(_context.Habitacion, "Numero", "Numero");
             return View();
         }
 
@@ -61,13 +75,23 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var empleado = await _context.Empleado.FirstOrDefaultAsync(e => e.UsuarioNombre == _userManager.GetUserName(User));
+                objetoPerdido.EmpleadoId = empleado.EmpleadoId;
+                objetoPerdido.Fecha = DateTime.Now;
                 objetoPerdido.Estado = 0;
                 _context.Add(objetoPerdido);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return RedirectToRoute("https://sistemahoteleriabahia.azurewebsites.net");
+                alert("success", "Objeto Perdido registrado con éxito", "Operación exitosa");
+                if (User.IsInRole("Limpieza"))
+                {
+                    return RedirectToAction("index", "limpieza");
+                }
+                if (User.IsInRole("Administrador"))
+                {
+                    return RedirectToAction("index");
+                }
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", objetoPerdido.EmpleadoId);
+            ViewData["Habitaciones"] = new SelectList(_context.Habitacion, "Numero", "Numero");
             return View(objetoPerdido);
         }
 
@@ -84,7 +108,6 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", objetoPerdido.EmpleadoId);
             var estados = new SelectList(
                 new List<SelectListItem>
                 {
@@ -125,9 +148,9 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Detalles del objeto perdido editado con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleado, "EmpleadoId", "Apellidos", objetoPerdido.EmpleadoId);
             var estados = new SelectList(
                 new List<SelectListItem>
                 {

@@ -51,12 +51,10 @@
             </div>
             <div class="form-group">
                 <label for="rolId">Rol</label>
-                <input type="text" name="rolId" class="form-control" />
+                <div>
+                    @Html.DropDownList("rolId", new SelectList(ViewBag.Roles, "Id", "Name"))
+                </div>
             </div>
-            @*<div class="form-group">
-                <label for="rolId">Rol</label>
-                <select type="text" name="rolId" class="form-control" asp-items="ViewBag.Roles" />
-            </div>*@
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-default" />
             </div>

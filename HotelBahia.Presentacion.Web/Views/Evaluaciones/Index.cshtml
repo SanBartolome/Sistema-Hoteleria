@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.EvaluacionSupervisor>
+﻿@model IEnumerable<HotelBahia.Presentacion.Web.Models.EvaluacionModel>
 
 @{
     ViewData["Title"] = "Lista de Evaluaciones";
@@ -35,7 +35,7 @@
                 @Html.DisplayFor(modelItem => item.ResultadoEvaluacion.Evaluador)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.ResultadoEvaluacionId">Ver detalles</a> |
+                <a asp-action="Details" asp-route-id="@item.EvaluacionSupervisor.EvaluacionSupervisorId">Ver detalles</a>
             </td>
         </tr>
 }
