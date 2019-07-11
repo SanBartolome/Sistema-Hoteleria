@@ -2,20 +2,22 @@
     ViewData["Title"] = "Check Out";
 }
 <div id="checkOutModule" class="container-fluid">
-    <div class="card card-outline card-info">
+    <div class="card card-outline">
         <div class="card-header">
             Habitaciones
         </div>
-    </div>
-    <div class="box-habitacions-wrapper">
-        <div v-for="hab in listHabitaciones">
-            <div class="small-box box-habitacion">
-                <div class="inner">
-                    <h3>{{hab.numero}}</h3>
-                    <p class="text-info" v-bind:class="'text-' + colorState[hab.estadoHabitacionId]">{{hab.estadoHabitacion.estadoNombre}}</p>
+        <div class="card-body">
+            <div class="box-habitacions-wrapper" v-cloak>
+                <div v-for="hab in listHabitaciones">
+                    <div class="small-box box-habitacion">
+                        <div class="inner">
+                            <h3>{{hab.numero}}</h3>
+                            <p class="text-info" v-bind:class="'text-' + colorState[hab.estadoHabitacionId]">{{hab.estadoHabitacion.estadoNombre}}</p>
+                        </div>
+                        <button v-on:click="checkOut(hab)" class="btn rounded-0 small-box-footer " v-if="hab.estadoHabitacionId == 2" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]">Check Out<i class="ml-2 fa fa-arrow-circle-right"></i></button>
+                        <div v-else class="small-box-footer" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]"></div>
+                    </div>
                 </div>
-                <a href="#" v-on:click="checkOut(hab)" class="small-box-footer " v-if="hab.estadoHabitacionId == 2" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]">Check Out<i class="ml-2 fa fa-arrow-circle-right"></i></a>
-                <div v-else class="small-box-footer" v-bind:class="'bg-' + colorState[hab.estadoHabitacionId]"></div>
             </div>
         </div>
     </div>
@@ -47,14 +49,33 @@
                             this.listHabitaciones = response.body
                         });
                 },
+                refresh: function () {
+                    this.getListHabitaciones();
+                },
                 checkOut: function ($this) {
                     this.$http.get('api/Habitacion/Checkout/' + $this.habitacionId)
                         .then(function (response) {
                             this.getListHabitaciones();
                             console.log(this);
+                            toast.success('Checkout realizado', 'Operación exitosa');
                         },
                     function (response) {
                         console.log(response);
+                        const error = response.body;
+                        const errorMessage = error.messages[0];
+                        const buttons = errorMessage === 'HABITACION.MISSING_CLEANER' ? [] : [
+                            [
+                                '<button>Actualizar</button>',
+                                function (instance, toast) {
+                                    instance.hide({ transitionOut: 'fadeOut' }, toast);
+                                    onToastRefreshClick();
+                                }
+                            ]
+                        ];
+                        const onToastRefreshClick = (function () { this.refresh() }).bind(this);
+                        toast.error(errorMessage, 'Error en la operación', {
+                            buttons: buttons
+                        });
                     });
                 }
             }

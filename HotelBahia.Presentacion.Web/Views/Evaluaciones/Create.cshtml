@@ -1,48 +1,43 @@
-﻿@model HotelBahia.BussinesLogic.Domain.ResultadoEvaluacion
+﻿@model HotelBahia.Presentacion.Web.Models.EvaluacionModel
 
 @{
     ViewData["Title"] = "Crear Evaluacion";
 }
 
-<h4>ResultadoEvaluacion</h4>
+<h4>Resultado Evaluacion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label for="EmpleadoId">Empleado</label>
-                <select type="text" name="empleadoId" class="form-control" asp-items="ViewBag.Empleado" />
+                <label asp-for="Empleado.UsuarioNombre" class="control-label">Supervisor</label>
+                <select asp-for="Empleado.UsuarioNombre" class="form-control" asp-items="ViewBag.Supervisores"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Tardanzas" class="control-label"></label>
-                <input asp-for="Tardanzas" class="form-control" />
-                <span asp-validation-for="Tardanzas" class="text-danger"></span>
+                <label asp-for="ResultadoEvaluacion.Tardanzas" class="control-label"></label>
+                <input asp-for="ResultadoEvaluacion.Tardanzas" class="form-control" />
+                <span asp-validation-for="ResultadoEvaluacion.Tardanzas" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Faltas" class="control-label"></label>
-                <input asp-for="Faltas" class="form-control" />
-                <span asp-validation-for="Faltas" class="text-danger"></span>
+                <label asp-for="ResultadoEvaluacion.Faltas" class="control-label"></label>
+                <input asp-for="ResultadoEvaluacion.Faltas" class="form-control" />
+                <span asp-validation-for="ResultadoEvaluacion.Faltas" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SupervisionesNegativas" class="control-label"></label>
-                <input asp-for="SupervisionesNegativas" class="form-control" />
-                <span asp-validation-for="SupervisionesNegativas" class="text-danger"></span>
+                <label asp-for="ResultadoEvaluacion.SupervisionesNegativas" class="control-label"></label>
+                <input asp-for="ResultadoEvaluacion.SupervisionesNegativas" class="form-control" />
+                <span asp-validation-for="ResultadoEvaluacion.SupervisionesNegativas" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Valoracion" class="control-label"></label>
-                <input asp-for="Valoracion" class="form-control" />
-                <span asp-validation-for="Valoracion" class="text-danger"></span>
+                <label asp-for="ResultadoEvaluacion.Valoracion" class="control-label"></label>
+                <input asp-for="ResultadoEvaluacion.Valoracion" class="form-control" />
+                <span asp-validation-for="ResultadoEvaluacion.Valoracion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Comentarios" class="control-label"></label>
-                <input asp-for="Comentarios" class="form-control" />
-                <span asp-validation-for="Comentarios" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Evaluador" class="control-label"></label>
-                <input asp-for="Evaluador" class="form-control" />
-                <span asp-validation-for="Evaluador" class="text-danger"></span>
+                <label asp-for="ResultadoEvaluacion.Comentarios" class="control-label"></label>
+                <input asp-for="ResultadoEvaluacion.Comentarios" class="form-control" />
+                <span asp-validation-for="ResultadoEvaluacion.Comentarios" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-default" />

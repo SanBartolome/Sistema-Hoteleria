@@ -38,7 +38,14 @@
                 @Html.DisplayFor(modelItem => item.Encargado)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+                @if (item.Estado == 0)
+                {
+                    <p>Pendiente</p>
+                }
+                @if (item.Estado == 1)
+                {
+                    <p>Resuelto</p>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IncidenciaID">Editar</a> |
