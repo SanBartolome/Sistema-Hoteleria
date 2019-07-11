@@ -24,12 +24,16 @@ namespace HotelBahia.DataAccess.Context
         public virtual DbSet<TipoActividad> TipoActividad { get; set; }
         public virtual DbSet<TipoHabitacion> TipoHabitacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Incidencia> Incidencia { get; set; }
+        public virtual DbSet<ObjetoPerdido> ObjetoPerdido { get; set; }
+        public virtual DbSet<ResultadoEvaluacion> ResultadoEvaluacion { get; set; }
+        public virtual DbSet<EvaluacionSupervisor> EvaluacionSupervisor { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=.\MSSQLSERVER2017;Database=Hoteleria;User=sa;Password=%abcd1234%;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server=DESKTOP-HB1UI73;Database=Hoteleria;Trusted_Connection=True;");
             }
         }
 
@@ -206,6 +210,88 @@ namespace HotelBahia.DataAccess.Context
                     .WithMany(p => p.Usuario)
                     .HasForeignKey(d => d.RolId)
                     .HasConstraintName("FK_Usuario_Rol");
+            });
+
+            modelBuilder.Entity<Incidencia>(entity =>
+            {
+                entity.Property(e => e.IncidenciaID).HasColumnName("IncidenciaID");
+
+                entity.Property(e => e.EmpleadoId).HasColumnName("EmpleadoID");
+
+                entity.Property(e => e.Prioridad)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Descripcion)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Encargado)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+                entity.Property(e => e.FechaAbierto).HasColumnType("datetime");
+
+                entity.Property(e => e.FechaCerrado).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Empleado)
+                    .WithMany(p => p.Incidencia)
+                    .HasForeignKey(d => d.EmpleadoId)
+                    .HasConstraintName("FK_Incidencia_Empleado");
+            });
+
+            modelBuilder.Entity<ObjetoPerdido>(entity =>
+            {
+                entity.Property(e => e.ObjetoPerdidoId).HasColumnName("ObjetoPerdidoID");
+
+                entity.Property(e => e.EmpleadoId).HasColumnName("EmpleadoID");
+
+                entity.Property(e => e.Nombre)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Descripcion)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Empleado)
+                    .WithMany(p => p.ObjetoPerdido)
+                    .HasForeignKey(d => d.EmpleadoId)
+                    .HasConstraintName("FK_ObjetoPerdido_Empleado");
+            });
+
+            modelBuilder.Entity<ResultadoEvaluacion>(entity =>
+            {
+                entity.Property(e => e.ResultadoEvaluacionId).HasColumnName("ResultadoEvaluacionID");
+
+                entity.Property(e => e.Comentarios)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+
+                entity.Property(e => e.Evaluador)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<EvaluacionSupervisor>(entity =>
+            {
+                entity.Property(e => e.EvaluacionSupervisorId).HasColumnName("EvaluacionSupervisorID");
+
+                entity.Property(e => e.EmpleadoId).HasColumnName("EmpleadoID");
+
+                entity.Property(e => e.ResultadoEvaluacionId).HasColumnName("ResultadoEvaluacionID");
+
+                entity.HasOne(d => d.Empleado)
+                    .WithMany(p => p.EvaluacionSupervisor)
+                    .HasForeignKey(d => d.EmpleadoId)
+                    .HasConstraintName("FK_EvaluacionSupervisor_Empleado");
+
+                entity.HasOne(d => d.ResultadoEvaluacion)
+                    .WithMany(p => p.EvaluacionSupervisor)
+                    .HasForeignKey(d => d.ResultadoEvaluacionId)
+                    .HasConstraintName("FK_EvaluacionSupervisor_ResultadoEvaluacion");
             });
         }
     }

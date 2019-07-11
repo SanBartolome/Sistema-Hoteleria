@@ -15,6 +15,7 @@ namespace HotelBahia.BussinesLogic.Domain.Enums
         [Display(Name="Limpieza Realizada")]
         LimpiezaRealizada = 5,
         LimpiezaIncompleta = 6,
+        Bloqueado = 7
     }
 
     public enum LimpiezaEstado

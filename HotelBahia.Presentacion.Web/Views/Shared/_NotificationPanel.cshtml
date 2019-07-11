@@ -1,0 +1,7 @@
+﻿<script>
+    var notification = cookiesHelper.getCookie("notificacion");
+    notification = decodeURI(notification).replace(/%2C/g, ",");
+    notification = notification.replace(/%2C/g, ",");
+    eval(notification);
+    cookiesHelper.deleteCookie("notificacion");
+</script>

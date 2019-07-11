@@ -9,10 +9,12 @@ using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.DataAccess.Context;
 using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class EmpleadosController : Controller
+    public class EmpleadosController : BaseController
     {
         private readonly HoteleriaContext _context;
         private readonly UserManager<UserLogin> _userManager;
@@ -24,12 +26,14 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
             return View(await _context.Empleado.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,10 +52,12 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Create
         public IActionResult Create()
         {
-            ViewData["Rol"] = new SelectList(_roleManager.Roles, "Id", "Name");
+            var roles = _roleManager.Roles.ToList();
+            ViewData["Roles"] = roles;
             return View();
         }
 
@@ -73,11 +79,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
             {
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
+                alert("success", "Empleado registrado con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -124,11 +132,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Empleado editado con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -155,6 +165,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             var empleado = await _context.Empleado.FindAsync(id);
             _context.Empleado.Remove(empleado);
             await _context.SaveChangesAsync();
+            alert("success", "Empleado eliminado con exito", "Operacion exitosa");
             return RedirectToAction(nameof(Index));
         }
 

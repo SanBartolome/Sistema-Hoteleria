@@ -17,6 +17,8 @@ namespace HotelBahia.Presentacion.Web.Controllers
         {
             _habitacionRepository = habitacionRepository;
         }
+
+        [Authorize(Roles = "Supervisor")]
         public IActionResult Index()
         {
             return View();

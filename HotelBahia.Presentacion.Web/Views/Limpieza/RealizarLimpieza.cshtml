@@ -7,7 +7,7 @@
     <div id="appLimpieza" class="row">
         <div class="col-md-4">
             <div class="card card-outline" v-bind:class="'card-' + colorState[estadoHabitacionId]">
-                <div class="card-header " >
+                <div class="card-header ">
                     <h2 class="box-title">Habitacion: @Model.Habitacion.Numero<span></span></h2>
                 </div>
                 <div class="card-body">
@@ -19,14 +19,20 @@
                             @foreach (var item in Model.Habitacion.HabitacionActividad)
                             {
                                 <li class="list-group-item no-border">
-                                    <i class="fa fa-circle text-info text-sm mr-1" ></i>@item.Actividad.Descripcion
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i>@item.Actividad.Descripcion
                                 </li>
                             }
                         </ul>
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-center ">
-                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary ">Limpieza Realizada</button>
+                    <button type="button" v-on:click="checkRealizarLimpieza()" class="btn btn-primary"
+                            :disabled="bloqueadoPorCambioOtroUsuario">
+                        Limpieza Realizada
+                    </button>
+                </div>
+                <div>
+                    <a asp-controller="ObjetosPerdidos" asp-action="Create">Registrar objeto perdido</a>
                 </div>
             </div>
         </div>
@@ -46,8 +52,10 @@
                     3: "cyan",
                     4: "green",
                     5: "red",
-                    6: "yellow"
-                }
+                    6: "yellow",
+                    7: "gray"
+                },
+                bloqueadoPorCambioOtroUsuario: false
             },
             created: function () {
                 
@@ -57,7 +65,17 @@
                     this.$http.get("/api/Habitacion/CheckLimpiezaRealizada/" + this.habitacionId)
                         .then(function (response) {
                             this.estadoHabitacionId = response.body.estadoHabitacionId;
+                            toast.success('Limpieza realizada', 'Operación exitosa');
                         })
+                        .catch(function (err) {
+                            console.log(err);
+                            const error = err.body;
+                            const errorMessage = error.messages[0];
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_CLEAN") {
+                                this.bloqueadoPorCambioOtroUsuario = true;
+                            }
+                            toast.error(errorMessage, 'Error en la operación');
+                        });
                 }
             }
         });

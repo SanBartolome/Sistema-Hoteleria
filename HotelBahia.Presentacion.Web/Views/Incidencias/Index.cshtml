@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HotelBahia.BussinesLogic.Domain.Incidencia>
+
+@{
+    ViewData["Title"] = "Lista de incidencias";
+}
+
+<p>
+    <a asp-action="Create">Registrar nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Habitacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prioridad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Encargado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Habitacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prioridad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Encargado)
+            </td>
+            <td>
+                @if (item.Estado == 0)
+                {
+                    <p>Pendiente</p>
+                }
+                @if (item.Estado == 1)
+                {
+                    <p>Resuelto</p>
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IncidenciaID">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IncidenciaID">Ver detalles</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
