@@ -32,7 +32,7 @@ $boxed-layout-max-width: 1250px !default;
 $screen-header-collapse: map-get($grid-breakpoints, md) !default;
 
 // Body background (Affects main content background only)
-$main-bg: #f4f6f9 !default;
+$main-bg: #F0F0F7!default;
 
 // Content padding
 $content-padding-y: 0 !default;
@@ -76,7 +76,7 @@ $main-footer-bg: $white;
 // Dark sidebar
 $sidebar-dark-bg: $dark !default;
 $sidebar-dark-hover-bg: hsla(100, 100%, 100%, 0.1) !default;
-$sidebar-dark-color: #C2C7D0 !default;
+$sidebar-dark-color: #eceff3 !default;
 $sidebar-dark-hover-color: $white !default;
 $sidebar-dark-active-color: $white !default;
 $sidebar-dark-submenu-bg: transparent !default;

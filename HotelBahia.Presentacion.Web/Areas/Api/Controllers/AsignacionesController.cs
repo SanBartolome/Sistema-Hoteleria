@@ -30,6 +30,8 @@ namespace HotelBahia.Presentacion.Web.Areas.Api.Controllers
             var username = User.Identity.Name;
             var empleado = _empleadoRepository.Find(x => x.UsuarioNombre == username).SingleOrDefault();
 
+            Response.Headers.Add("Cache-Control", " no-cache ");
+
             var habitacionesAsignadas = _asignacionesRepository.HabitacionesAsignadas(empleado.EmpleadoId);
             if (habitacionesAsignadas == null)
             {

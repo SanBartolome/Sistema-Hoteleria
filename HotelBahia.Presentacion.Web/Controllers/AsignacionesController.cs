@@ -10,11 +10,13 @@ using HotelBahia.DataAccess.Context;
 using System.Data.SqlClient;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Dto;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
     
-    public class AsignacionesController : Controller
+    public class AsignacionesController : BaseController
     {
         private readonly HoteleriaContext _context;
 
@@ -23,6 +25,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones
         [Route("[controller]/Limpieza")]
         public async Task<IActionResult> Index()
@@ -32,6 +35,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(lista.Where( x => x.RolId == 3));
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,6 +56,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Create
         public IActionResult Create()
         {
@@ -83,6 +88,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 asignacionHabitacion.RolId = (int)RolEnum.AgenteDeLimpieza;
                 _context.Add(asignacionHabitacion);
                 await _context.SaveChangesAsync();
+                alert("success", "Asignacion registrada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             SqlParameter[] parametros = new SqlParameter[]
@@ -97,6 +103,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -153,6 +160,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Asignacion editada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             SqlParameter[] parametros = new SqlParameter[]
@@ -167,6 +175,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -195,6 +204,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             var asignacionHabitacion = await _context.AsignacionHabitacion.FindAsync(id);
             _context.AsignacionHabitacion.Remove(asignacionHabitacion);
             await _context.SaveChangesAsync();
+            alert("success", "Asignacion eliminada con exito", "Operacion exitosa");
             return RedirectToAction(nameof(Index));
         }
 

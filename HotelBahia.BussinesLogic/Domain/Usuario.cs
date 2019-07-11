@@ -6,9 +6,9 @@ namespace HotelBahia.BussinesLogic.Domain
 {
     public partial class Usuario
     {
-        [Required]
+        [Required(ErrorMessage = "El nombre de usuario es requerido")]
         public string UsuarioNombre { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La contraseña es requerida")]
         public string Password { get; set; }
         public int? RolId { get; set; }
         public Rol Rol { get; set; }

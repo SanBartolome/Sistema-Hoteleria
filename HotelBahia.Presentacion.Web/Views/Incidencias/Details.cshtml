@@ -1,0 +1,71 @@
+﻿@model HotelBahia.BussinesLogic.Domain.Incidencia
+
+@{
+    ViewData["Title"] = "Detalles de la incidencia";
+}
+
+<div>
+    <h4>Incidencia</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Habitacion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Habitacion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Prioridad)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Prioridad)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Encargado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Encargado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd>
+            @if (Model.Estado == 0)
+            {
+                <p>Pendiente</p>
+            }
+            @if (Model.Estado == 1)
+            {
+                <p>Resuelto</p>
+            }
+        </dd>
+        <dt>
+            Fecha Abierto
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaAbierto)
+        </dd>
+        <dt>
+            Fecha Cerrado
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaCerrado)
+        </dd>
+        <dt>
+            Registrado por
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empleado.Apellidos)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IncidenciaID">Editar</a> |
+    <a asp-action="Index">Regresar a la lista</a>
+</div>

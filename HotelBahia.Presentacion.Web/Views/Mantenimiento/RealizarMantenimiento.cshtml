@@ -1,0 +1,85 @@
+﻿
+@model RealizarMantenimientoViewModel;
+@{
+    ViewData["Title"] = "Realizar Mantenimiento";
+}
+<div class="container-fluid">
+    <div id="appMantenimiento" class="row">
+        <div class="col-md-4">
+            <div class="card card-outline" v-bind:class="'card-' + colorState[estadoHabitacionId]">
+                <div class="card-header ">
+                    <h2 class="box-title">Habitacion: @Model.Habitacion.Numero<span></span></h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <h4>Incidencia:</h4>
+                    </div>
+                    <div>
+                        <ul class="list-group list-group-unbordered">
+                            <li class="list-group-item no-border">
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Prioridad: @Model.Incidencia.Prioridad
+                                </div>
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Descripcion: @Model.Incidencia.Descripcion
+                                </div>
+                                <div>
+                                    <i class="fa fa-circle text-info text-sm mr-1"></i> Fecha Abierto: @Model.Incidencia.FechaAbierto
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-center ">
+                    <button type="button" v-on:click="checkRealizarMantenimiento()" class="btn btn-primary"
+                            :disabled="bloqueadoPorCambioOtroUsuario">
+                        Mantenimento Realizado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts{
+    <script>
+        var mantenimientoViewModel = new Vue({
+            el: "#appMantenimiento",
+            data: {
+                estadoHabitacionId: @Model.Habitacion.EstadoHabitacionId,
+                habitacionId: @Model.Habitacion.HabitacionId,
+                colorState: {
+                    2: "purple",
+                    1: "indigo",
+                    3: "cyan",
+                    4: "green",
+                    5: "red",
+                    6: "yellow",
+                    7: "gray"
+                },
+                bloqueadoPorCambioOtroUsuario: false
+            },
+            created: function () {
+
+            },
+            methods: {
+                checkRealizarMantenimiento: function () {
+                    this.$http.get("/api/Habitacion/CheckMantenimientoRealizado/" + this.habitacionId)
+                        .then(function (response) {
+                            this.estadoHabitacionId = response.body.estadoHabitacionId;
+                            toast.success('Mantenimiento realizado', 'Operación exitosa');
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                            const error = err.body;
+                            const errorMessage = error.messages[0];
+                            if (errorMessage === "HABITACION.ERROR_ON_CHECK_UPKEEP") {
+                                this.bloqueadoPorCambioOtroUsuario = true;
+                            }
+                            toast.error(errorMessage, 'Error en la operación');
+                        });
+                }
+            }
+        });
+    </script>
+}

@@ -1,6 +1,8 @@
 ﻿using HotelBahia.BussinesLogic.Domain;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.DataAccess.Context;
+using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
-    public class HabitacionsController : Controller
+    public class HabitacionsController : BaseController
     {
         private readonly HoteleriaContext _context;
 
@@ -20,6 +22,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions
         public async Task<IActionResult> Index()
         {
@@ -27,6 +30,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(await hoteleriaContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -47,6 +51,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Create
         public IActionResult Create()
         {
@@ -101,6 +106,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                     }
 
                 }
+                alert("success", "Habitacion creada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EstadoHabitacion"] = new SelectList(_context.EstadoHabitacion, "EstadoHabitacionId", "EstadoNombre", habitacion.EstadoHabitacionId);
@@ -108,6 +114,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -156,6 +163,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
                         throw;
                     }
                 }
+                alert("success", "Habitacion editada con exito", "Operacion exitosa");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EstadoHabitacion"] = new SelectList(_context.EstadoHabitacion, "EstadoHabitacionId", "EstadoNombre", habitacion.EstadoHabitacionId);
@@ -163,6 +171,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -192,6 +201,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             habitacion.IsDelete = true;
             _context.Update(habitacion);
             await _context.SaveChangesAsync();
+            alert("success", "Habitacion eliminada con exito", "Operacion exitosa");
             return RedirectToAction(nameof(Index));
         }
 
