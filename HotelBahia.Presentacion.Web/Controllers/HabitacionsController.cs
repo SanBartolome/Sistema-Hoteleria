@@ -2,6 +2,7 @@
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.DataAccess.Context;
 using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions
         public async Task<IActionResult> Index()
         {
@@ -28,6 +30,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(await hoteleriaContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,6 +51,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Create
         public IActionResult Create()
         {
@@ -110,6 +114,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -166,6 +171,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(habitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Habitacions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

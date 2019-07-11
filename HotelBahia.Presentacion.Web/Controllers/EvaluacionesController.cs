@@ -10,6 +10,7 @@ using HotelBahia.DataAccess.Context;
 using HotelBahia.Presentacion.Web.Controllers.Base;
 using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -24,24 +25,29 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Evaluaciones
         public IActionResult Index()
         {
             List<EvaluacionModel> models = new List<EvaluacionModel>();
             var cantidad = _context.EvaluacionSupervisor.Include(es => es.ResultadoEvaluacion).Include(es => es.Empleado).ToList().Count;
-            for (int i=1; i<=cantidad; i++)
+            if (cantidad > 0)
             {
-                EvaluacionModel model = new EvaluacionModel();
-                model.EvaluacionSupervisor = _context.EvaluacionSupervisor.Find(i);
-                var empleado = _context.Empleado.Where(e => e.EmpleadoId == model.EvaluacionSupervisor.EmpleadoId).FirstOrDefault();
-                model.Empleado = empleado;
-                var resultadoEvaluacion = _context.ResultadoEvaluacion.Where(e => e.ResultadoEvaluacionId == model.EvaluacionSupervisor.ResultadoEvaluacionId).FirstOrDefault();
-                model.ResultadoEvaluacion = resultadoEvaluacion;
-                models.Add(model);
+                for (int i = 1; i <= cantidad; i++)
+                {
+                    EvaluacionModel model = new EvaluacionModel();
+                    model.EvaluacionSupervisor = _context.EvaluacionSupervisor.Find(i);
+                    var empleado = _context.Empleado.Where(e => e.EmpleadoId == model.EvaluacionSupervisor.EmpleadoId).FirstOrDefault();
+                    model.Empleado = empleado;
+                    var resultadoEvaluacion = _context.ResultadoEvaluacion.Where(e => e.ResultadoEvaluacionId == model.EvaluacionSupervisor.ResultadoEvaluacionId).FirstOrDefault();
+                    model.ResultadoEvaluacion = resultadoEvaluacion;
+                    models.Add(model);
+                }
             }
             return View(models);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Evaluaciones/Details/5
         public IActionResult Details(int? id)
         {
@@ -69,6 +75,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Evaluaciones/Create
         public IActionResult Create()
         {

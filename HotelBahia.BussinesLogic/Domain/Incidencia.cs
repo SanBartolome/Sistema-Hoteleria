@@ -10,8 +10,10 @@ namespace HotelBahia.BussinesLogic.Domain
 
         public int IncidenciaID { get; set; }
         public int EmpleadoId { get; set; }
+        [Required(ErrorMessage = "La habitacion donde se encuentra la incidencia es requerida")]
         public int? Habitacion { get; set; }
         public string Prioridad { get; set; }
+        [Required(ErrorMessage = "La descripcion de la incidencia es requerida")]
         public string Descripcion { get; set; }
         public string Encargado { get; set; }
         public int? Estado { get; set; }

@@ -10,6 +10,7 @@ using HotelBahia.DataAccess.Context;
 using HotelBahia.Presentacion.Web.Controllers.Base;
 using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -24,6 +25,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: ObjetosPerdidos
         public async Task<IActionResult> Index()
         {
@@ -31,6 +33,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(await hoteleriaContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: ObjetosPerdidos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -50,6 +53,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(objetoPerdido);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: ObjetosPerdidos/Create
         public IActionResult Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
@@ -95,6 +99,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(objetoPerdido);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: ObjetosPerdidos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

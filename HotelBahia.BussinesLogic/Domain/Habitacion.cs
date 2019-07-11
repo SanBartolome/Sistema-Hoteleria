@@ -14,7 +14,7 @@ namespace HotelBahia.BussinesLogic.Domain
         }
         
         public int HabitacionId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El numero de la habitacion es requerido")]
         public int? Numero { get; set; }
         public int? Piso { get; set; }
         public int? EstadoHabitacionId { get; set; }

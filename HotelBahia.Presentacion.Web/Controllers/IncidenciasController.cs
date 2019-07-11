@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
 using HotelBahia.BussinesLogic.Servicios.AppServices;
 using HotelBahia.BussinesLogic.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -26,6 +27,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Incidencias
         public async Task<IActionResult> Index()
         {
@@ -33,6 +35,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(await hoteleriaContext.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Incidencias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -52,6 +55,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(incidencia);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Incidencias/Create
         public IActionResult Create([FromQuery(Name = "habitacion")] string habitacionNum)
         {
@@ -65,6 +69,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 return View(new Incidencia() { Habitacion = habitacion.Numero });
             }
             ViewData["Habitaciones"] = new SelectList(_context.Habitacion.Where(h => h.EstadoHabitacionId != 7), "Numero", "Numero");
+            List<string> prioridad = new List<string>
+            {
+                "Alta",
+                "Media",
+                "Baja"
+            };
+            ViewData["Prioridad"] = new SelectList(prioridad);
             return View();
         }
 
@@ -97,9 +108,17 @@ namespace HotelBahia.Presentacion.Web.Controllers
                 }
             }
             ViewData["Habitaciones"] = new SelectList(_context.Habitacion.Where(h => h.EstadoHabitacionId != 7), "Numero", "Numero");
+            List<string> prioridad = new List<string>
+            {
+                "Alta",
+                "Media",
+                "Baja"
+            };
+            ViewData["Prioridad"] = new SelectList(prioridad);
             return View(incidencia);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Incidencias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -122,6 +141,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
             var encargados = _userManager.GetUsersInRoleAsync("Mantenimiento").Result;
             ViewData["Encargado"] = new SelectList(encargados);
+            List<string> prioridad = new List<string>
+            {
+                "Alta",
+                "Media",
+                "Baja"
+            };
+            ViewData["Prioridad"] = new SelectList(prioridad);
             return View(incidencia);
         }
 
@@ -216,6 +242,13 @@ namespace HotelBahia.Presentacion.Web.Controllers
             ViewData["Estado"] = new SelectList(estados, estados.DataTextField, estados.DataValueField);
             var encargados = _userManager.GetUsersInRoleAsync("Mantenimiento").Result;
             ViewData["Encargado"] = new SelectList(encargados);
+            List<string> prioridad = new List<string>
+            {
+                "Alta",
+                "Media",
+                "Baja"
+            };
+            ViewData["Prioridad"] = new SelectList(prioridad);
             return View(incidencia);
         }
 

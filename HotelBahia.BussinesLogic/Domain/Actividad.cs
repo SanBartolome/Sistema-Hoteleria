@@ -13,7 +13,7 @@ namespace HotelBahia.BussinesLogic.Domain
 
         public int ActividadId { get; set; }
         public int TipoActividadId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La descripcion de la activdad es requerida")]
         public string Descripcion { get; set; }
         public int Estado { get; set; }
 

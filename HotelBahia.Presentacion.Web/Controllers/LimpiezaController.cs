@@ -55,6 +55,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Limpieza")]
         public IActionResult Index()
         {
             return View();

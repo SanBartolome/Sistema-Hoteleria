@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using HotelBahia.BussinesLogic.Domain.Enums;
 using HotelBahia.BussinesLogic.Dto;
 using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -24,6 +25,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
         {
             var hoteleriaContext = _context.AsignacionHabitacion.Include(a => a.Empleado).Include(a => a.Habitacion);
@@ -31,6 +33,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(lista.Where( x => x.RolId == (int)RolEnum.Supervisor));
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -51,6 +54,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Create
         public IActionResult Create()
         {
@@ -97,6 +101,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -168,6 +173,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(asignacionHabitacion);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Asignaciones/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

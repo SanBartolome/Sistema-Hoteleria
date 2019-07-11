@@ -10,6 +10,7 @@ using HotelBahia.DataAccess.Context;
 using Microsoft.AspNetCore.Identity;
 using HotelBahia.Presentacion.Web.Models;
 using HotelBahia.Presentacion.Web.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelBahia.Presentacion.Web.Controllers
 {
@@ -25,12 +26,14 @@ namespace HotelBahia.Presentacion.Web.Controllers
             _roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados
         public async Task<IActionResult> Index()
         {
             return View(await _context.Empleado.ToListAsync());
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -49,6 +52,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Create
         public IActionResult Create()
         {
@@ -81,6 +85,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -133,6 +138,7 @@ namespace HotelBahia.Presentacion.Web.Controllers
             return View(empleado);
         }
 
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
